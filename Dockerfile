@@ -12,13 +12,9 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 RUN apt-get update 
 
 # install RUN apt-get install -y ssh
-RUN apt-get install -y curl
-RUN apt-get install -y nano
-RUN apt-get install -y git
-RUN apt-get install -y htop
-RUN apt-get install -y build-essential
-RUN apt-get install -y software-properties-common
-RUN apt-get install -y zip
+RUN apt-get update && \
+    apt-get install -y curl nano git htop build-essential software-properties-common zip
+
 		
 # install useful openfoam tools
 RUN apt-get install -y ffmpeg
