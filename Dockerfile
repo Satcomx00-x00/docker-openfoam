@@ -38,10 +38,11 @@ RUN git clone https://develop.openfoam.com/Development/ThirdParty-common && \
     git clone https://develop.openfoam.com/Development/openfoam -j 8
 RUN cd openfoam
 
-RUN ls
+
 
 # Source bashrc and build OpenFOAM
-
+RUN echo "$PWD"
+RUN ls openfoam
 RUN source etc/bashrc
 RUN Allwmake -j 32 -s -q -l
 
