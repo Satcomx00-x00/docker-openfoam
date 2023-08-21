@@ -3,7 +3,9 @@ ENV DEBIAN_FRONTEND=noninteractive
 
 # Set the shell to bash
 SHELL ["/bin/bash", "-c"]
-RUN apt-add-repository ppa:apt-fast/stable -y && apt-get update && apt-get -y install apt-fast 
+RUN apt-add-repository ppa:apt-fast/stable -y 
+RUN apt-get update 
+RUN apt-get -y install apt-fast 
 
 # setup timezone
 ENV TZ=Europe/Paris
