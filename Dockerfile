@@ -3,17 +3,18 @@ ENV DEBIAN_FRONTEND=noninteractive
 
 # Set the shell to bash
 SHELL ["/bin/bash", "-c"]
+RUN apt-add-repository ppa:apt-fast/stable -y && apt-get update && apt-get -y install apt-fast 
 
 # setup timezone
 ENV TZ=Europe/Paris
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
 # install essentials
-RUN apt-get update && \
-    apt-get install -y curl nano git htop build-essential software-properties-common zip
+RUN apt-fast update && \
+    apt-fast install -y curl nano git htop build-essential software-properties-common zip
 
 # install useful openfoam tools
-RUN apt-get install -y ffmpeg
+RUN apt-fast install -y ffmpeg
 
 # download openfoam and update repos
 # RUN curl https://dl.openfoam.com/add-debian-repo.sh | bash
