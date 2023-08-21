@@ -4,6 +4,8 @@ ENV DEBIAN_FRONTEND=noninteractive
 # Set the shell to bash
 SHELL ["/bin/bash", "-c"]
 
+RUN rm /bin/sh && ln -s /bin/bash /bin/sh
+
 # setup timezone
 ENV TZ=Europe/Paris
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
