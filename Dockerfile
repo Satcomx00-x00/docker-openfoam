@@ -34,8 +34,7 @@ RUN useradd --user-group --create-home --shell /bin/bash foam ;\
     echo "foam ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
 
 # Clone ThirdParty-common and openfoam repositories
-RUN git clone https://develop.openfoam.com/Development/ThirdParty-common
-      && \ git clone https://develop.openfoam.com/Development/openfoam -j 8
+RUN git clone https://develop.openfoam.com/Development/ThirdParty-common && git clone https://develop.openfoam.com/Development/openfoam -j 8
 
 RUN cd openfoam
 
