@@ -38,7 +38,7 @@ RUN git clone https://develop.openfoam.com/Development/ThirdParty-common && git 
 
 RUN cd /workdir/openfoam/
 RUN ls -lsa
-
+RUN cd openfoam/
 # Source bashrc and build OpenFOAM
 RUN echo "$PWD"
 RUN ls
