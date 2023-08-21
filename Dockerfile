@@ -37,14 +37,16 @@ RUN useradd --user-group --create-home --shell /bin/bash foam ;\
 RUN git clone https://develop.openfoam.com/Development/ThirdParty-common && git clone https://develop.openfoam.com/Development/openfoam -j 8
 
 RUN chmod +x openfoam/Allwmake load_env.sh
-RUN ./load_env.sh
 
 RUN cd /workdir/openfoam/
+
 RUN ls -lsa
 RUN cd openfoam/
 # Source bashrc and build OpenFOAM
 RUN echo "$PWD"
 RUN ls
+RUN ./load_env.sh
+
 # COPY /workdir/openfoam/etc/bashrc /root/.bashrc
 # RUN /bin/bash -c "source /root/.bashrc"
 # RUN source /workdir/openfoam/etc/bashrc
