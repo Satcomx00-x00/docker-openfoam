@@ -42,6 +42,7 @@ RUN cd openfoam/
 # Source bashrc and build OpenFOAM
 RUN echo "$PWD"
 RUN ls
+RUN chmod +x Allwmake
 # COPY /workdir/openfoam/etc/bashrc /root/.bashrc
 # RUN /bin/bash -c "source /root/.bashrc"
 # RUN source /workdir/openfoam/etc/bashrc
