@@ -44,7 +44,7 @@ RUN ls
 # COPY /workdir/openfoam/etc/bashrc /root/.bashrc
 # RUN /bin/bash -c "source /root/.bashrc"
 # RUN source /workdir/openfoam/etc/bashrc
-RUN Allwmake -j 32 -s -q -l
+RUN ./Allwmake -j 32 -s -q -l
 
 
 
