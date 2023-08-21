@@ -27,7 +27,8 @@ RUN apt-get install -y ffmpeg
 # RUN apt-get install -y openfoam-default
 
 RUN git clone https://develop.openfoam.com/Development/ThirdParty-common
-RUN git clone https://develop.openfoam.com/Development/openfoam && cd $_
+RUN git clone https://develop.openfoam.com/Development/openfoam
+RUN cd openfoam
 
 RUN source etc/bashrc
 RUN 
