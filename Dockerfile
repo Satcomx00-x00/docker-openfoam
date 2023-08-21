@@ -32,8 +32,8 @@ RUN apt-fast install -y ffmpeg
 
 # Clone ThirdParty-common and openfoam repositories
 RUN git clone https://develop.openfoam.com/Development/ThirdParty-common && \
-    git clone https://develop.openfoam.com/Development/openfoam && \
-    cd openfoam
+    git clone https://develop.openfoam.com/Development/openfoam
+RUN cd openfoam
 
 # Source bashrc and build OpenFOAM
 RUN . etc/bashrc && \
