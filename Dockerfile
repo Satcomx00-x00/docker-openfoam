@@ -1,9 +1,6 @@
 FROM ubuntu:22.04
 ENV DEBIAN_FRONTEND=noninteractive
 
-# Set the shell to bash
-SHELL ["/bin/bash", "-c"]
-
 RUN rm /bin/sh && ln -s /bin/bash /bin/sh
 
 # setup timezone
@@ -40,10 +37,12 @@ RUN git clone https://develop.openfoam.com/Development/ThirdParty-common && \
 RUN cd openfoam
 
 RUN ls
+
 # Source bashrc and build OpenFOAM
 
+RUN source etc/bashrc
 RUN Allwmake -j 32 -s -q -l
-RUN . openfoam/etc/bashrc && \
+
 
 
 # export LD_LIBRARY_PATH for foam user
