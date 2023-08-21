@@ -7,7 +7,8 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
 # install essentials
 RUN apt-get update 
-RUN apt-get install -y ssh
+
+# install RUN apt-get install -y ssh
 RUN apt-get install -y curl
 RUN apt-get install -y nano
 RUN apt-get install -y git
@@ -20,11 +21,11 @@ RUN apt-get install -y zip
 RUN apt-get install -y ffmpeg
 
 # download openfoam and update repos
-RUN curl https://dl.openfoam.com/add-debian-repo.sh | bash
-RUN apt-get update
+# RUN curl https://dl.openfoam.com/add-debian-repo.sh | bash
+# RUN apt-get update
 
 # install latest openfoam
-RUN apt-get install -y openfoam-default
+# RUN apt-get install -y openfoam-default
 
 RUN git clone https://develop.openfoam.com/Development/ThirdParty-common
 RUN git clone https://develop.openfoam.com/Development/openfoam && cd $_
