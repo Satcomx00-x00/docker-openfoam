@@ -40,7 +40,8 @@ RUN git clone https://develop.openfoam.com/Development/ThirdParty-common && git 
 RUN source /workdir/openfoam/etc/bashrc
 # RUN /bin/bash -c "source /root/.bashrc"
 # RUN source /workdir/openfoam/etc/bashrc
-RUN cd openfoam/ && Allwmake -j 32 -s -q -l
+RUN chmod +x /workdir/openfoam/Allwmake
+RUN cd openfoam/ && ./Allwmake -j 32 -s -q -l
 
 
 
