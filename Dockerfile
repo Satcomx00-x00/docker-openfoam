@@ -1,6 +1,8 @@
 FROM ubuntu:22.04
 ENV DEBIAN_FRONTEND=noninteractive
 
+WORKDIR /workdir
+COPY . .
 RUN rm /bin/sh && ln -s /bin/bash /bin/sh
 
 # setup timezone
