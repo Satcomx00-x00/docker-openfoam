@@ -42,7 +42,7 @@ RUN cd openfoam
 RUN pwd
 # Source bashrc and build OpenFOAM
 
-RUN ./Allwmake -j 32 -s -q -l
+RUN Allwmake -j 32 -s -q -l
 RUN . openfoam/etc/bashrc && \
 
 
