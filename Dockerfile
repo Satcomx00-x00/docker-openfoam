@@ -30,18 +30,21 @@ RUN apt-fast install -y ffmpeg
 # install latest openfoam
 # RUN apt-get install -y openfoam-default
 
-# Clone ThirdParty-common and openfoam repositories
-RUN git clone https://develop.openfoam.com/Development/ThirdParty-common && \
-    git clone https://develop.openfoam.com/Development/openfoam
-RUN cd openfoam
-
-# Source bashrc and build OpenFOAM
-RUN . etc/bashrc && \
-    ./Allwmake -j 32 -s -q -l
-
 # add user "foam"
 RUN useradd --user-group --create-home --shell /bin/bash foam ;\
     echo "foam ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
+
+# Clone ThirdParty-common and openfoam repositories
+RUN git clone https://develop.openfoam.com/Development/ThirdParty-common && \
+    git clone https://develop.openfoam.com/Development/openfoam -j 8
+RUN cd openfoam
+
+RUN pwd
+# Source bashrc and build OpenFOAM
+RUN . openfoam/etc/bashrc && \
+    ./Allwmake -j 32 -s -q -l
+
+
 
 # export LD_LIBRARY_PATH for foam user
 RUN echo 'export LD_LIBRARY_PATH=/home/foam/ThirdParty-common/platforms/linux64Gcc/fftw-3.3.10/lib:$LD_LIBRARY_PATH' >> /home/foam/.bashrc
