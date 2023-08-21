@@ -39,15 +39,12 @@ RUN git clone https://develop.openfoam.com/Development/ThirdParty-common
 
 RUN cd openfoam
 
-RUN /bin/sh -c "sed -i 's/\(WM_PROJECT_USER_DIR=$HOME\).*$/\1/g' /opt/openfoam11/etc/bashrc"
-
-
-
 # Source bashrc and build OpenFOAM
 RUN echo "$PWD"
-RUN ls openfoam
-RUN ls openfoam/etc
-RUN source /workdir/openfoam/etc/bashrc
+
+COPY /workdir/openfoam/etc/bashrc /root/.bashrc
+RUN /bin/bash -c "source /root/.bashrc"
+# RUN source /workdir/openfoam/etc/bashrc
 RUN Allwmake -j 32 -s -q -l
 
 
