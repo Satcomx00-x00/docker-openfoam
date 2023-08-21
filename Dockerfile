@@ -8,7 +8,7 @@ SHELL ["/bin/bash", "-c"]
 ENV TZ=Europe/Paris
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
-
+RUN apt-get update 
 RUN apt-get install -y software-properties-common
 RUN apt-add-repository ppa:apt-fast/stable -y 
 RUN apt-get update 
