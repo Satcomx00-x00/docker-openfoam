@@ -36,7 +36,7 @@ RUN git clone https://develop.openfoam.com/Development/ThirdParty-common && \
     cd openfoam
 
 # Source bashrc and build OpenFOAM
-RUN /bin/bash -c '. etc/bashrc' && \
+RUN . etc/bashrc && \
     ./Allwmake -j 32 -s -q -l
 
 # add user "foam"
