@@ -41,9 +41,9 @@ RUN cd openfoam
 
 RUN pwd
 # Source bashrc and build OpenFOAM
-RUN . openfoam/etc/bashrc && \
-    ./Allwmake -j 32 -s -q -l
 
+RUN ./Allwmake -j 32 -s -q -l
+RUN . openfoam/etc/bashrc && \
 
 
 # export LD_LIBRARY_PATH for foam user
