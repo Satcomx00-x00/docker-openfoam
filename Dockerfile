@@ -62,7 +62,7 @@ RUN echo 'source /usr/lib/openfoam/openfoam/etc/bashrc' >> /home/foam/.bashrc ;\
 
 RUN ls home/foam/OpenFOAM-v2306/platforms/linux64GccDPInt32Opt/bin
 
-# test
+# test xxx
 USER foam
 RUN source $wkdir/openfoam/etc/bashrc && \
     foamSystemCheck && \
