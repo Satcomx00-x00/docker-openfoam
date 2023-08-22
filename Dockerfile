@@ -48,7 +48,7 @@ ENV WM_PROJECT_DIR=/workdir/openfoam
 RUN chmod +x /workdir/openfoam/Allwmake
 
 RUN source /workdir/openfoam/etc/bashrc && cd openfoam/ && ./Allwmake -j 32 -s -q -l
-RUN cp -rf /workdir/openfoam /usr/lib/openfoam/
+RUN cp -rf /workdir/openfoam /usr/lib/openfoam/openfoam
 
 
 # export LD_LIBRARY_PATH for foam user
