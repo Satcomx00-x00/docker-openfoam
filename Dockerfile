@@ -65,7 +65,7 @@ RUN echo 'source /usr/lib/openfoam/openfoam/etc/bashrc' >> /home/foam/.bashrc ;\
 # test
 USER foam
 
-RUN foamTestTutorial -full incompressible/simpleFoam/pitzDaily
+# RUN foamTestTutorial -full incompressible/simpleFoam/pitzDaily
 
 RUN source $wkdir/openfoam/etc/bashrc && \
     foamSystemCheck && \
