@@ -20,7 +20,7 @@ RUN apt-get update  && \
 
 # install essentials
 RUN apt-fast update && \
-    apt-fast install -y curl nano git htop build-essential software-properties-common zip
+    apt-fast install -y curl nano git htop build-essential software-properties-common zip libopenmpi-dev
 
 # install useful openfoam tools
 RUN apt-fast install -y ffmpeg flex
