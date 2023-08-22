@@ -60,6 +60,6 @@ RUN echo 'source /usr/lib/openfoam/openfoam/etc/bashrc' >> /home/foam/.bashrc ;\
 
 USER foam
 
-RUN foamInstallationTest
+RUN source /usr/lib/openfoam/openfoam/etc/bashrc && foamInstallationTest
 
 ENTRYPOINT [ "./entrypoint.sh" ]
