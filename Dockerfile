@@ -1,20 +1,22 @@
 FROM ubuntu:22.04
 ENV DEBIAN_FRONTEND=noninteractive
-ENV dir = /openfoam
 
 WORKDIR /workdir
 COPY . .
-RUN rm /bin/sh && ln -s /bin/bash /bin/sh
+
+RUN rm /bin/sh && \
+    ln -s /bin/bash /bin/sh
 
 # setup timezone
 ENV TZ=Europe/Paris
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
-RUN apt-get update 
-RUN apt-get install -y software-properties-common
-RUN apt-add-repository ppa:apt-fast/stable -y 
-RUN apt-get update 
-RUN apt-get -y install apt-fast 
+RUN apt-get update  && \
+    apt-get install -y software-properties-common  && \
+    apt-add-repository ppa:apt-fast/stable -y  && \
+    apt-get update  && \
+    apt-get -y install apt-fast
+
 
 # install essentials
 RUN apt-fast update && \
@@ -35,7 +37,8 @@ RUN useradd --user-group --create-home --shell /bin/bash foam ;\
     echo "foam ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
 
 # Clone ThirdParty-common and openfoam repositories
-RUN git clone https://develop.openfoam.com/Development/ThirdParty-common && git clone https://develop.openfoam.com/Development/openfoam -j 8
+RUN git clone https://develop.openfoam.com/Development/ThirdParty-common && \
+    git clone https://develop.openfoam.com/Development/openfoam -j 8
 
 # Source bashrc and build OpenFOAM
 # RUN /bin/bash -c "source /root/.bashrc"
