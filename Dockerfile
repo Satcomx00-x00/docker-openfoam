@@ -48,7 +48,7 @@ ENV WM_PROJECT_DIR=$wkdir/openfoam
 
 RUN chmod +x $wkdir/openfoam/Allwmake
 
-RUN source $wkdir/openfoam/etc/bashrc && cd openfoam/ && ./Allwmake -j 32 -s -q -l
+RUN source $wkdir/openfoam/etc/bashrc && cd openfoam/ && ./Allwmake -j -s -l
 
 # export LD_LIBRARY_PATH for foam user
 RUN echo 'export LD_LIBRARY_PATH=$wkdir/ThirdParty-common/platforms/linux64Gcc/fftw-3.3.10/lib:$LD_LIBRARY_PATH' >> /home/foam/.bashrc
