@@ -23,7 +23,7 @@ RUN apt-fast update && \
     apt-fast install -y curl nano git htop build-essential software-properties-common zip
 
 # install useful openfoam tools
-RUN apt-fast install -y ffmpeg
+RUN apt-fast install -y ffmpeg flex
 
 RUN apt-fast upgrade -y
 # download openfoam and update repos
