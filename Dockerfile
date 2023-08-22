@@ -1,5 +1,6 @@
 FROM ubuntu:22.04
 ENV DEBIAN_FRONTEND=noninteractive
+ENV dir = /openfoam
 
 WORKDIR /workdir
 COPY . .
@@ -48,7 +49,7 @@ RUN source /workdir/openfoam/etc/bashrc && cd openfoam/ && ./Allwmake -j 32 -s -
 
 
 # export LD_LIBRARY_PATH for foam user
-RUN echo 'export LD_LIBRARY_PATH=/home/foam/ThirdParty-common/platforms/linux64Gcc/fftw-3.3.10/lib:$LD_LIBRARY_PATH' >> /home/foam/.bashrc
+RUN echo 'export LD_LIBRARY_PATH=/workdirThirdParty-common/platforms/linux64Gcc/fftw-3.3.10/lib:$LD_LIBRARY_PATH' >> /home/foam/.bashrc
 
 # source openfoam and fix docker mpi for foam user
 RUN echo 'source /usr/lib/openfoam/openfoam/etc/bashrc' >> /home/foam/.bashrc ;\
