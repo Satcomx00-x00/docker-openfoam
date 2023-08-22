@@ -37,12 +37,13 @@ RUN useradd --user-group --create-home --shell /bin/bash foam ;\
 RUN git clone https://develop.openfoam.com/Development/ThirdParty-common && git clone https://develop.openfoam.com/Development/openfoam -j 8
 
 # Source bashrc and build OpenFOAM
-RUN source /workdir/openfoam/etc/bashrc
 # RUN /bin/bash -c "source /root/.bashrc"
 # RUN source /workdir/openfoam/etc/bashrc
 ENV WM_PROJECT_DIR=/workdir/openfoam
+
 RUN chmod +x /workdir/openfoam/Allwmake
-RUN cd openfoam/ && ./Allwmake -j 32 -s -q -l
+
+RUN source /workdir/openfoam/etc/bashrc && cd openfoam/ && ./Allwmake -j 32 -s -q -l
 
 
 
