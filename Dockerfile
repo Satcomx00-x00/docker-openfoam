@@ -60,6 +60,9 @@ RUN echo 'source /usr/lib/openfoam/openfoam/etc/bashrc' >> /home/foam/.bashrc ;\
 # Change environmental variables for foam user
 # RUN sed -i '/export WM_PROJECT_USER_DIR=/cexport WM_PROJECT_USER_DIR="/data/foam-$WM_PROJECT_VERSION"' /usr/lib/openfoam/openfoam/etc/bashrc
 
+RUN ls home/foam/OpenFOAM-v2306/platforms/linux64GccDPInt32Opt/bin
+
+
 USER foam
 RUN source $wkdir/openfoam/etc/bashrc && \
     foamSystemCheck && \
