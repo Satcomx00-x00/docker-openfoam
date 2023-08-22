@@ -25,6 +25,7 @@ RUN apt-fast update && \
 # install useful openfoam tools
 RUN apt-fast install -y ffmpeg
 
+RUN apt-fast upgrade -y
 # download openfoam and update repos
 # RUN curl https://dl.openfoam.com/add-debian-repo.sh | bash
 # RUN apt-get update
@@ -60,7 +61,7 @@ RUN echo 'source /usr/lib/openfoam/openfoam/etc/bashrc' >> /home/foam/.bashrc ;\
 # RUN sed -i '/export WM_PROJECT_USER_DIR=/cexport WM_PROJECT_USER_DIR="/data/foam-$WM_PROJECT_VERSION"' /usr/lib/openfoam/openfoam/etc/bashrc
 
 USER foam
-RUN source /usr/lib/openfoam/openfoam/etc/bashrc && \
+RUN source $wkdir/openfoam/etc/bashrc && \
     foamSystemCheck && \
     foamInstallationTest && \
     foam
