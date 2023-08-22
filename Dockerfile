@@ -64,6 +64,12 @@ RUN echo 'source /usr/lib/openfoam/openfoam/etc/bashrc' >> /home/foam/.bashrc ;\
 
 # test
 USER foam
+
+RUN mkdir -p "$FOAM_RUN"
+USER run
+
+RUN foamTestTutorial -full incompressible/simpleFoam/pitzDaily
+
 RUN source $wkdir/openfoam/etc/bashrc && \
     foamSystemCheck && \
     foamInstallationTest && \
