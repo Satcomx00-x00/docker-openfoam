@@ -69,8 +69,7 @@ USER foam
 
 RUN source $wkdir/openfoam/etc/bashrc && \
     foamSystemCheck && \
-    foamInstallationTest && \
-    simpleFoam
+    foamInstallationTest
 # update
 
 ENTRYPOINT [ "./entrypoint.sh" ]
