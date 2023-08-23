@@ -1,6 +1,7 @@
 FROM ubuntu:22.04
 ENV DEBIAN_FRONTEND=noninteractive
 ENV wkdir=/usr/lib/
+ENV WM_THIRD_PARTY_DIR=/usr/lib/ThirdParty-common/
 WORKDIR $wkdir
 COPY . .
 
