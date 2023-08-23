@@ -73,5 +73,5 @@ RUN source $wkdir/openfoam/etc/bashrc && \
     foamInstallationTest
 # update
 
-ENTRYPOINT [ "/bin/bash" ]
+ENTRYPOINT [ "/bin/bash" "-c","/bin/bash" ]
 # ENTRYPOINT [ "./entrypoint.sh" ]
