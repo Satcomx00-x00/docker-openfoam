@@ -49,21 +49,16 @@ ENV WM_PROJECT_DIR=$wkdir/openfoam
 
 RUN chmod +x $wkdir/openfoam/Allwmake
 
-RUN source $wkdir/openfoam/etc/bashrc && cd openfoam/ && ./Allwmake -j 64 -s -q -l
+RUN source $wkdir/openfoam/openfoam/etc/bashrc && cd openfoam/ && ./Allwmake -j 64 -s -q -l
 
 # export LD_LIBRARY_PATH for foam user
 RUN echo 'export LD_LIBRARY_PATH=$wkdir/ThirdParty-common/platforms/linux64Gcc/fftw-3.3.10/lib:$LD_LIBRARY_PATH' >> /home/foam/.bashrc
 
 # source openfoam and fix docker mpi for foam user
-RUN echo 'source /usr/lib/openfoam/openfoam/etc/bashrc' >> /home/foam/.bashrc ;\
+RUN echo 'source /usr/lib/openfoam/etc/bashrc' >> /home/foam/.bashrc ;\
     echo 'export OMPI_MCA_btl_vader_single_copy_mechanism=none' >> /home/foam/.bashrc
 
 # Change environmental variables for foam user
-# RUN sed -i '/export WM_PROJECT_USER_DIR=/cexport WM_PROJECT_USER_DIR="/data/foam-$WM_PROJECT_VERSION"' /usr/lib/openfoam/openfoam/etc/bashrc
-
-# RUN ls home/foam/OpenFOAM-v2306/platforms/linux64GccDPInt32Opt/bin
-
-# test
 USER foam
 
 # RUN foamTestTutorial -full incompressible/simpleFoam/pitzDaily
@@ -73,5 +68,5 @@ RUN source $wkdir/openfoam/etc/bashrc && \
     foamInstallationTest
 # update
 
-ENTRYPOINT [ "/bin/bash", "-c", "/bin/bash" ]
-# ENTRYPOINT [ "./entrypoint.sh" ]
+# ENTRYPOINT [ "/bin/bash", "-c", "/bin/bash" ]
+ENTRYPOINT [ "./entrypoint.sh" ]
