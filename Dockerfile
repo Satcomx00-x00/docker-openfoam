@@ -71,6 +71,6 @@ RUN source $wkdir/openfoam/etc/bashrc && \
     foamSystemCheck && \
     foamInstallationTest && \
     simpleFoam
-
+# update
 
 ENTRYPOINT [ "./entrypoint.sh" ]
