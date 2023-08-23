@@ -40,8 +40,7 @@ RUN useradd --user-group --create-home --shell /bin/bash foam ;\
 
 # Clone ThirdParty-common and openfoam repositories
 RUN git clone https://develop.openfoam.com/Development/ThirdParty-common && \
-    git clone https://develop.openfoam.com/Development/openfoam -j 8 && \
-    cp -rf ThirdParty-common/* openfoam/
+    git clone https://develop.openfoam.com/Development/openfoam -j 8
 
 # Source bashrc and build OpenFOAM
 # RUN /bin/bash -c "source /root/.bashrc"
