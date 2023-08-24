@@ -1,72 +1,63 @@
+# Use the official Ubuntu image as the base
 FROM ubuntu:22.04
+
+# Set non-interactive mode for installations
 ENV DEBIAN_FRONTEND=noninteractive
+
+# Set working directory variables
 ENV wkdir=/usr/lib
 ENV WM_THIRD_PARTY_DIR=/usr/lib/ThirdParty-common/
 WORKDIR $wkdir
+
+# Copy the entire context into the container
 COPY . .
 
+# Update and install apt-fast
 RUN rm /bin/sh && \
-    ln -s /bin/bash /bin/sh
-
-# setup timezone
-ENV TZ=Europe/Paris
-RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
-
-RUN apt-get update  && \
-    apt-get install -y software-properties-common  && \
-    apt-add-repository ppa:apt-fast/stable -y  && \
-    apt-get update  && \
+    ln -s /bin/bash /bin/sh && \
+    apt-get update && \
+    apt-get install -y software-properties-common && \
+    apt-add-repository ppa:apt-fast/stable -y && \
+    apt-get update && \
     apt-get -y install apt-fast
 
-
-# install essentials
+# Install essential packages
 RUN apt-fast update && \
     apt-fast install -y curl nano git htop build-essential software-properties-common zip libopenmpi-dev
 
-# install useful openfoam tools
+# Install additional tools
 RUN apt-fast install -y ffmpeg flex
 
+# Perform system upgrade
 RUN apt-fast upgrade -y
-# download openfoam and update repos
-# RUN curl https://dl.openfoam.com/add-debian-repo.sh | bash
-# RUN apt-get update
 
-# install latest openfoam
-# RUN apt-get install -y openfoam-default
-
-# add user "foam"
-RUN useradd --user-group --create-home --shell /bin/bash foam ;\
+# Add user "foam"
+RUN useradd --user-group --create-home --shell /bin/bash foam && \
     echo "foam ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
 
-# Clone ThirdParty-common and openfoam repositories
+# Clone ThirdParty-common and OpenFOAM repositories
 RUN git clone https://develop.openfoam.com/Development/ThirdParty-common && \
     git clone https://develop.openfoam.com/Development/openfoam -j 8
 
-# Source bashrc and build OpenFOAM
-# RUN /bin/bash -c "source /root/.bashrc"
-# RUN source $wkdir/openfoam/etc/bashrc
+# Set environment variables and build OpenFOAM
 ENV WM_PROJECT_DIR=$wkdir/openfoam
+RUN chmod +x $wkdir/openfoam/Allwmake && \
+    source $wkdir/openfoam/etc/bashrc && \
+    cd openfoam/ && \
+    ./Allwmake -j 64 -s -q -l
 
-RUN chmod +x $wkdir/openfoam/Allwmake
-
-RUN source $wkdir/openfoam/etc/bashrc && cd openfoam/ && ./Allwmake -j 64 -s -q -l
-
-# export LD_LIBRARY_PATH for foam user
-RUN echo 'export LD_LIBRARY_PATH=$wkdir/ThirdParty-common/platforms/linux64Gcc/fftw-3.3.10/lib:$LD_LIBRARY_PATH' >> /home/foam/.bashrc
-
-# source openfoam and fix docker mpi for foam user
-RUN echo 'source /usr/lib/openfoam/etc/bashrc' >> /home/foam/.bashrc ;\
+# Configure environment for foam user
+RUN echo 'export LD_LIBRARY_PATH=$wkdir/ThirdParty-common/platforms/linux64Gcc/fftw-3.3.10/lib:$LD_LIBRARY_PATH' >> /home/foam/.bashrc && \
+    echo 'source /usr/lib/openfoam/etc/bashrc' >> /home/foam/.bashrc && \
     echo 'export OMPI_MCA_btl_vader_single_copy_mechanism=none' >> /home/foam/.bashrc
 
-# Change environmental variables for foam user
+# Switch to the foam user
 USER foam
 
-# RUN foamTestTutorial -full incompressible/simpleFoam/pitzDaily
-
+# Test OpenFOAM installation
 RUN source $wkdir/openfoam/etc/bashrc && \
     foamSystemCheck && \
     foamInstallationTest
-# update
 
-# ENTRYPOINT [ "/bin/bash", "-c", "/bin/bash" ]
+# Set the entrypoint
 ENTRYPOINT [ "./entrypoint.sh" ]
