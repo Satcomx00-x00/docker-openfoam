@@ -51,7 +51,7 @@ mpirun -n $MPI $MODE $ARGUMENTS
 
 # Check for errors in simpleFoam
 if [ $? -eq 0 ]; then
-    print_message "simpleFoam completed successfully." $GREEN
+    print_message "$MODE completed successfully." $GREEN
 else
-    print_message "simpleFoam encountered an error. Please check." $RED
+    print_message "$MODE encountered an error. Please check." $RED
 fi
