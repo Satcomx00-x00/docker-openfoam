@@ -24,7 +24,7 @@ if [ -z "$WM_PROJECT_DIR" ]; then
 fi
 
 # Set working directory
-WORKDIR="/workdir"
+WORKDIR="/workdir/$DIRECTORY"
 cd "$WORKDIR" || exit
 
 # Set ulimit
@@ -39,7 +39,9 @@ blockMesh
 # MPI=4  # Number of MPI processes
 FOAM_DIR_PATH="$WM_PROJECT_DIR"
 print_message "Running simpleFoam with $MPI MPI processes..." $GREEN
-mpirun -np "$MPI" simpleFoam
+
+# mpirun -np "$MPI" simpleFoam
+mpirun -n $MPI $MODE $ARGUMENTS > log
 
 # Check for errors in simpleFoam
 if [ $? -eq 0 ]; then
