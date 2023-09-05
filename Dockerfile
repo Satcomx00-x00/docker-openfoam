@@ -11,7 +11,7 @@ WORKDIR $wkdir
 
 # Copy the entire context into the container
 COPY . .
-RUN chmod +x entrypoint.sh
+RUN chmod +x ./entrypoint.sh
 
 # Update and install apt-fast
 RUN rm /bin/sh && \
