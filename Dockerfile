@@ -11,6 +11,7 @@ WORKDIR $wkdir
 
 # Copy the entire context into the container
 COPY . .
+RUN chmod +x entrypoint.sh
 
 # Update and install apt-fast
 RUN rm /bin/sh && \
@@ -33,8 +34,8 @@ RUN apt-fast upgrade -y
 
 # Add user "foam"
 RUN useradd --user-group --create-home --shell /bin/bash foam && \
-    echo "foam ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers && \
-    chmod +x entrypoint.sh
+    echo "foam ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
+    
 
 # Clone ThirdParty-common and OpenFOAM repositories
 RUN git clone https://develop.openfoam.com/Development/ThirdParty-common && \
@@ -43,6 +44,7 @@ RUN git clone https://develop.openfoam.com/Development/ThirdParty-common && \
 # Set environment variables and build OpenFOAM
 ENV WM_PROJECT_DIR=$wkdir/openfoam
 RUN chmod +x $wkdir/openfoam/Allwmake && \
+    chmod +x entrypoint.sh && \
     source $wkdir/openfoam/etc/bashrc && \
     cd openfoam/ && \
     ./Allwmake -j 64 -s -q -l
