@@ -59,5 +59,6 @@ RUN source $wkdir/openfoam/etc/bashrc && \
     foamSystemCheck && \
     foamInstallationTest
 
+RUN chmod +x entrypoint.sh
 # Set the entrypoint
 ENTRYPOINT [ "./entrypoint.sh" ]
