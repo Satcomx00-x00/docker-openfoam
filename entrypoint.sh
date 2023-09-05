@@ -17,6 +17,9 @@ print_message() {
 print_message "Sourcing OpenFOAM bashrc..." $GREEN
 source /usr/lib/openfoam/etc/bashrc
 
+ls
+pwd
+
 # Check if OpenFOAM environment is sourced successfully
 if [ -z "$WM_PROJECT_DIR" ]; then
     print_message "Failed to source OpenFOAM bashrc. Exiting." $RED
@@ -39,6 +42,8 @@ blockMesh
 # MPI=4  # Number of MPI processes
 FOAM_DIR_PATH="$WM_PROJECT_DIR"
 print_message "Running simpleFoam with $MPI MPI processes..." $GREEN
+
+
 
 # mpirun -np "$MPI" simpleFoam
 mpirun -n $MPI $MODE $ARGUMENTS > log
