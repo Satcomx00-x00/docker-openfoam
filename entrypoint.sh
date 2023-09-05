@@ -1,5 +1,5 @@
 #!/bin/bash
-
+cd /workdir
 ls
 pwd
 chmod +xrw -R /workdir
@@ -42,12 +42,12 @@ blockMesh
 # Run simpleFoam
 # MPI=4  # Number of MPI processes
 FOAM_DIR_PATH="$WM_PROJECT_DIR"
-print_message "Running simpleFoam with $MPI MPI processes..." $GREEN
+print_message "Running $MODE with $MPI MPI processes..." $GREEN
 
 
 
 # mpirun -np "$MPI" simpleFoam
-mpirun -n $MPI $MODE $ARGUMENTS > log
+mpirun -n $MPI $MODE $ARGUMENTS
 
 # Check for errors in simpleFoam
 if [ $? -eq 0 ]; then

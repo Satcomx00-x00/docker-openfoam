@@ -55,6 +55,8 @@ RUN echo 'export LD_LIBRARY_PATH=$wkdir/ThirdParty-common/platforms/linux64Gcc/f
     echo 'source /usr/lib/openfoam/etc/bashrc' >> /home/foam/.bashrc && \
     echo 'export OMPI_MCA_btl_vader_single_copy_mechanism=none' >> /home/foam/.bashrc
 
+RUN chmod +xrw -R /workdir
+
 # Switch to the foam user
 USER foam
 
