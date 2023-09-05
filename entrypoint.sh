@@ -1,7 +1,5 @@
 #!/bin/bash
 cd /workdir
-ls
-pwd
 chmod +xrw -R /workdir
 # Define color codes
 GREEN='\033[0;32m'
@@ -39,17 +37,13 @@ ulimit -v unlimited
 print_message "Running blockMesh..." $GREEN
 blockMesh
 
-# Run simpleFoam
-# MPI=4  # Number of MPI processes
+
 FOAM_DIR_PATH="$WM_PROJECT_DIR"
 print_message "Running $MODE with $MPI MPI processes..." $GREEN
 
-
-
-# mpirun -np "$MPI" simpleFoam
 mpirun -n $MPI $MODE $ARGUMENTS
 
-# Check for errors in simpleFoam
+# Check for errors
 if [ $? -eq 0 ]; then
     print_message "$MODE completed successfully." $GREEN
 else
