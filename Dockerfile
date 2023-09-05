@@ -33,7 +33,8 @@ RUN apt-fast upgrade -y
 
 # Add user "foam"
 RUN useradd --user-group --create-home --shell /bin/bash foam && \
-    echo "foam ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
+    echo "foam ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers && \
+    chmod +x entrypoint.sh
 
 # Clone ThirdParty-common and OpenFOAM repositories
 RUN git clone https://develop.openfoam.com/Development/ThirdParty-common && \
@@ -59,7 +60,6 @@ RUN source $wkdir/openfoam/etc/bashrc && \
     foamSystemCheck && \
     foamInstallationTest
 
-RUN chmod +x $wkdir/entrypoint.sh
 
 # Set the entrypoint
 ENTRYPOINT [ "./entrypoint.sh" ]
