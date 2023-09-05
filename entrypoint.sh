@@ -1,5 +1,8 @@
 #!/bin/bash
 
+ls
+pwd
+chmod +xrw -R /workdir
 # Define color codes
 GREEN='\033[0;32m'
 YELLOW='\033[0;33m'
@@ -17,8 +20,6 @@ print_message() {
 print_message "Sourcing OpenFOAM bashrc..." $GREEN
 source /usr/lib/openfoam/etc/bashrc
 
-ls
-pwd
 
 # Check if OpenFOAM environment is sourced successfully
 if [ -z "$WM_PROJECT_DIR" ]; then
