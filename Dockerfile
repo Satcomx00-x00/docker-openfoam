@@ -37,7 +37,7 @@ RUN apt-fast upgrade -y
 RUN useradd --user-group --create-home --shell /bin/bash foam && \
     echo "foam ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
 
-RUN chown foam:foam -R /workdir
+# RUN chown foam:foam -R /workdir
 
 # Clone ThirdParty-common and OpenFOAM repositories
 RUN git clone https://develop.openfoam.com/Development/ThirdParty-common && \
@@ -61,7 +61,7 @@ RUN echo 'export LD_LIBRARY_PATH=$wkdir/ThirdParty-common/platforms/linux64Gcc/f
 
 
 # Switch to the foam user
-USER foam
+# USER foam
 
 # Test OpenFOAM installation
 RUN source $wkdir/openfoam/etc/bashrc && \
