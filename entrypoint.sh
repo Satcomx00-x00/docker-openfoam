@@ -14,8 +14,10 @@ print_message() {
     echo -e "${color}${message}${NC}"
 }
 
+cd /workdir
 print_message "Unzipping $ZIP_ARCHIVE_INTPUT ..." $GREEN
 unzip $ZIP_ARCHIVE_INTPUT
+
 
 # Source OpenFOAM bashrc
 print_message "Sourcing OpenFOAM bashrc..." $GREEN
@@ -29,7 +31,7 @@ if [ -z "$WM_PROJECT_DIR" ]; then
 fi
 
 # Set working directory
-WORKDIR="/workdir/$DIRECTORY"
+WORKDIR="/workdir/$ZIP_ARCHIVE_INTPUT"
 cd "$WORKDIR" || exit
 
 # Set ulimit
