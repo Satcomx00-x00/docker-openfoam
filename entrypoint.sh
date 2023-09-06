@@ -55,7 +55,7 @@ else
     print_message "$MODE encountered an error. Please check." $RED
 fi
 
-ZIP_OUTPUT_FOLDER = $ZIP_ARCHIVE_INTPUT-output.zip
+ZIP_OUTPUT_FOLDER = "$ZIP_ARCHIVE_INTPUT-output.zip"
 
 # Zip output folder
 print_message "Zipping $ZIP_ARCHIVE_INTPUT to $ZIP_OUTPUT_FOLDER ..." $GREEN
