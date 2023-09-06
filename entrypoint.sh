@@ -52,3 +52,10 @@ if [ $? -eq 0 ]; then
 else
     print_message "$MODE encountered an error. Please check." $RED
 fi
+
+ZIP_OUTPUT_FOLDER = $ZIP_ARCHIVE_INTPUT-output.zip
+
+# Zip output folder
+print_message "Zipping $ZIP_ARCHIVE_INTPUT to $ZIP_OUTPUT_FOLDER ..." $GREEN
+zip -r "$ZIP_OUTPUT_FOLDER" "$ZIP_ARCHIVE_INTPUT" || { print_message "Failed to zip $ZIP_ARCHIVE_INTPUT. Exiting." $RED; exit 1; }
+print_message "Successfully zipped $OUTPUT_FOLDER to $ZIP_OUTPUT_FOLDER." $GREEN
