@@ -44,7 +44,7 @@ blockMesh
 FOAM_DIR_PATH="$WM_PROJECT_DIR"
 print_message "Running $MODE with $MPI MPI processes..." $GREEN
 
-mpirun -n $MPI $MODE $ARGUMENTS
+mpirun -n $MPI $MODE $ARGUMENTS > terminal.log
 
 # Check for errors
 if [ $? -eq 0 ]; then
