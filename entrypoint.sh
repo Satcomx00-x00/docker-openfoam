@@ -16,7 +16,7 @@ print_message() {
 
 cd /workdir
 print_message "Unzipping $ZIP_ARCHIVE_INTPUT ..." $GREEN
-unzip $ZIP_ARCHIVE_INTPUT
+unzip $ZIP_ARCHIVE_INTPUT -d $ZIP_ARCHIVE_INTPUT
 
 
 # Source OpenFOAM bashrc
