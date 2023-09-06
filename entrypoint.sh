@@ -14,10 +14,12 @@ print_message() {
     echo -e "${color}${message}${NC}"
 }
 
-cd /workdir
-print_message "Unzipping $ZIP_ARCHIVE_INTPUT ..." $GREEN
 
-unzip $ZIP_ARCHIVE_INTPUT -d /OpenFoam/
+cd /workdir
+mkdir -p OpenFoam
+cd OpenFoam
+print_message "Unzipping $ZIP_ARCHIVE_INTPUT ..." $GREEN
+unzip $ZIP_ARCHIVE_INTPUT
 
 
 # Source OpenFOAM bashrc
