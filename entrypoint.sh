@@ -14,6 +14,9 @@ print_message() {
     echo -e "${color}${message}${NC}"
 }
 
+print_message "Unzipping $ZIP_ARCHIVE_INTPUT ..." $GREEN
+unzip $ZIP_ARCHIVE_INTPUT
+
 # Source OpenFOAM bashrc
 print_message "Sourcing OpenFOAM bashrc..." $GREEN
 source /usr/lib/openfoam/etc/bashrc
