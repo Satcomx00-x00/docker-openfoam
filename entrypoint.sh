@@ -34,7 +34,7 @@ display_table() {
 cd /workdir
 mkdir -p OpenFoam
 cd OpenFoam
-script terminal.log
+# script terminal.log
 print_message "Unzipping $ZIP_ARCHIVE_INPUT ..." $GREEN
 unzip "/workdir/$ZIP_ARCHIVE_INPUT"
 
