@@ -31,6 +31,7 @@ display_table() {
 cd /workdir
 mkdir -p OpenFoam
 cd OpenFoam
+script terminal.log
 print_message "Unzipping $ZIP_ARCHIVE_INPUT ..." $GREEN
 unzip "/workdir/$ZIP_ARCHIVE_INPUT"
 
@@ -63,7 +64,7 @@ print_message "Running $MODE with $MPI MPI processes..." $GREEN
 print_message "Parameters =>  $MPI $MODE $ARGUMENTS"
 
 # Redirect mpirun output to a log file
-mpirun -n $MPI $MODE $ARGUMENTS > terminal.log 2>&1
+mpirun -n $MPI $MODE $ARGUMENTS  # 2>&1
 
 # Check for errors
 if [ $? -eq 0 ]; then
@@ -76,7 +77,7 @@ ZIP_OUTPUT_FOLDER="$ZIP_ARCHIVE_INPUT-output.zip"
 
 # Zip output folder
 print_message "Zipping $ZIP_ARCHIVE_INPUT to $ZIP_OUTPUT_FOLDER ..." $GREEN
-zip -r "/workdir/$ZIP_OUTPUT_FOLDER" "/workdir$ZIP_ARCHIVE_INPUT-output" || {
+zip -r "/workdir/$ZIP_OUTPUT_FOLDER" "/workdir/$ZIP_ARCHIVE_INPUT-output" || {
     print_message "Failed to zip $ZIP_ARCHIVE_INPUT. Exiting." $RED
     exit 1
 }
