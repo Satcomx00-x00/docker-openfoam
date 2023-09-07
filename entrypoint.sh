@@ -78,11 +78,14 @@ ZIP_OUTPUT_FOLDER="$ZIP_ARCHIVE_INPUT-output.zip"
 
 # Zip output folder
 print_message "Zipping $ZIP_ARCHIVE_INPUT to $ZIP_OUTPUT_FOLDER ..." $GREEN
-zip -r "/workdir/$ZIP_OUTPUT_FOLDER" "/workdir/$ZIP_ARCHIVE_INPUT-output" || {
+zip -r "/workdir/$ZIP_OUTPUT_FOLDER-output.zip" "/workdir/$ZIP_ARCHIVE_INPUT" || {
     print_message "Failed to zip $ZIP_ARCHIVE_INPUT. Exiting." $RED
     exit 1
 }
+
 print_message "Successfully zipped $ZIP_OUTPUT_FOLDER." $GREEN
+
+
 
 # Display a summary table
 header="Simulation Summary"

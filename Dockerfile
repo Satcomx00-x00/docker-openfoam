@@ -60,7 +60,6 @@ ENV OMPI_ALLOW_RUN_AS_ROOT=1
 ENV OMPI_ALLOW_RUN_AS_ROOT_CONFIRM=1
 
 
-
 # Switch to the foam user
 # USER foam
 
