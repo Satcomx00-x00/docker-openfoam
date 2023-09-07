@@ -1,4 +1,5 @@
 #!/bin/bash
+# entrypoint.sh
 # MPI = 4
 # MODE = interFoam
 # ARGUMENTS = -parallel
@@ -59,7 +60,7 @@ FOAM_DIR_PATH="$WM_PROJECT_DIR"
 print_message "Running $MODE with $MPI MPI processes..." $GREEN
 
 
-print_message $MPI $MODE $ARGUMENTS
+print_message "Parameters =>  $MPI $MODE $ARGUMENTS"
 
 # Redirect mpirun output to a log file
 mpirun -n $MPI $MODE $ARGUMENTS > terminal.log 2>&1
