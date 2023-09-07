@@ -25,7 +25,7 @@ RUN rm /bin/sh && \
 
 # Install essential packages
 RUN apt-fast update && \
-    apt-fast install -y curl nano git htop build-essential software-properties-common zip libopenmpi-dev script
+    apt-fast install -y curl nano git htop build-essential software-properties-common zip libopenmpi-dev
 
 # Install additional tools
 RUN apt-fast install -y ffmpeg flex
