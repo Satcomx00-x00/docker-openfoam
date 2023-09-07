@@ -6,8 +6,6 @@
 cd /workdir
 chmod +xrw -R /workdir
 
-OMPI_ALLOW_RUN_AS_ROOT=1
-OMPI_ALLOW_RUN_AS_ROOT_CONFIRM=1
 
 # Define color codes
 GREEN='\033[0;32m'
