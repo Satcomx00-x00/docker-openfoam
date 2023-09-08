@@ -78,7 +78,7 @@ ZIP_OUTPUT_FOLDER="$ZIP_ARCHIVE_INPUT-output.zip"
 
 # Zip output folder
 print_message "Zipping $ZIP_ARCHIVE_INPUT to $ZIP_OUTPUT_FOLDER ..." $GREEN
-zip -r "/workdir/$ZIP_OUTPUT_FOLDER-output.zip" "/workdir/$ZIP_ARCHIVE_INPUT" || {
+zip -r "/workdir/$ZIP_OUTPUT_FOLDER" "/workdir/$ZIP_ARCHIVE_INPUT" 2>&1 || {
     print_message "Failed to zip $ZIP_ARCHIVE_INPUT. Exiting." $RED
     exit 1
 }
