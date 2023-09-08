@@ -61,8 +61,11 @@ blockMesh
 FOAM_DIR_PATH="$WM_PROJECT_DIR"
 print_message "Running $MODE with $MPI MPI processes..." $GREEN
 
+# Display a summary table
+header="Simulation Summary"
+rows=("Input Archive: $ZIP_ARCHIVE_INPUT" "Output Archive: $ZIP_OUTPUT_FOLDER" "MPI Processes: $MPI" "Mode: $MODE" "Arguments: $ARGUMENTS")
+display_table "$header" "${rows[@]}"
 
-print_message "Parameters =>  $MPI $MODE $ARGUMENTS"
 
 # Redirect mpirun output to a log file
 mpirun -n $MPI $MODE $ARGUMENTS  # 2>&1
@@ -85,9 +88,4 @@ zip -r "/workdir/$ZIP_OUTPUT_FOLDER" "/workdir/$ZIP_ARCHIVE_INPUT" 2>&1 || {
 
 print_message "Successfully zipped $ZIP_OUTPUT_FOLDER." $GREEN
 
-
-
-# Display a summary table
-header="Simulation Summary"
-rows=("Input Archive: $ZIP_ARCHIVE_INPUT" "Output Archive: $ZIP_OUTPUT_FOLDER" "MPI Processes: $MPI" "Mode: $MODE" "Arguments: $ARGUMENTS")
-display_table "$header" "${rows[@]}"
+print_message "Work done, you can find your outputs to $ZIP_OUTPUT_FOLDER in your personal volume."
