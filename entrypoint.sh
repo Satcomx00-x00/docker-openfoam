@@ -34,7 +34,7 @@ mkdir -p OpenFoam
 cd OpenFoam
 # script terminal.log
 print_message "Unzipping $ZIP_ARCHIVE_INPUT ..." $GREEN
-unzip "/workdir/$ZIP_ARCHIVE_INPUT"
+unzip -o "/workdir/$ZIP_ARCHIVE_INPUT"
 
 # Source OpenFOAM bashrc
 print_message "Sourcing OpenFOAM bashrc..." $GREEN
