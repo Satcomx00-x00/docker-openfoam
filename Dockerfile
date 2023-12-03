@@ -1,5 +1,5 @@
 # Use the official Ubuntu image as the base
-FROM ubuntu:mantic-20231011
+FROM ubuntu:mantic
 
 # Set non-interactive mode for installations
 ENV DEBIAN_FRONTEND=noninteractive
