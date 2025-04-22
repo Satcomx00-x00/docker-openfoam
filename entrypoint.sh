@@ -1,8 +1,30 @@
 #!/bin/bash
-# entrypoint.sh
+#==============================================================================
+# OpenFOAM Docker Runner
+# Version: 1.0.0
+# Date: $(date "+%Y-%m-%d")
+# Repository: github.com/openfoam/docker-runner
+#==============================================================================
 # MPI = 4
 # MODE = interFoam
 # ARGUMENTS = -parallel
+
+# Terminal header
+print_header() {
+    clear
+    echo -e "\033[1;34m"
+    echo "  ___                   _____  ___    _   __  ___ "
+    echo " / _ \ _ __   ___ _ __ |  ___|/ _ \  / \ |  \/  | "
+    echo "| | | | '_ \ / _ \ '_ \| |_  | | | |/ _ \| |\/| | "
+    echo "| |_| | |_) |  __/ | | |  _| | |_| / ___ \ |  | | "
+    echo " \___/| .__/ \___|_| |_|_|    \___/_/   \_\_|  |_| "
+    echo "      |_|                                         "
+    echo -e "\033[0m"
+    echo -e "\033[1;32m===== OpenFOAM Docker Runner v1.0.0 =====\033[0m"
+    echo -e "\033[0;36mStarting simulation environment...\033[0m"
+    echo ""
+}
+
 cd /workdir
 chmod +xrw -R /workdir
 # Define color codes
@@ -24,6 +46,10 @@ display_table() {
     printf "%s\n" "$header"
     printf "%s\n" "${rows[@]}"
 }
+
+# Print header
+print_header
+
 cd /workdir
 mkdir -p OpenFoam
 cd OpenFoam
@@ -42,7 +68,7 @@ fi
 # Extract the filename without .zip extension
 ZIP_BASE=$(basename "$ZIP_ARCHIVE_INPUT" .zip)
 WORKDIR="/workdir/$ZIP_BASE"
-cd "$WORKDIR" || exit
+# cd "$WORKDIR" || exit
 # Set ulimit
 ulimit -s unlimited
 ulimit -v unlimited
