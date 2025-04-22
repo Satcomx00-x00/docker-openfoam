@@ -8,8 +8,8 @@ ENV WM_THIRD_PARTY_DIR=/usr/lib/ThirdParty-common/
 WORKDIR $wkdir
 # Copy the entire context into the container
 COPY . .
-COPY --chmod=777 entrypoint.sh entrypoint.sh
-RUN chmod +x ./entrypoint.sh
+COPY --chmod=777 entrypoint.sh /workdir/entrypoint.sh
+RUN chmod +x /workdir/entrypoint.sh
 # Update and install apt-fast
 RUN rm /bin/sh && \
     ln -s /bin/bash /bin/sh && \
@@ -34,7 +34,6 @@ RUN git clone https://develop.openfoam.com/Development/ThirdParty-common && \
 # Set environment variables and build OpenFOAM
 ENV WM_PROJECT_DIR=$wkdir/openfoam
 RUN chmod +x $wkdir/openfoam/Allwmake && \
-    chmod +x entrypoint.sh && \
     source $wkdir/openfoam/etc/bashrc && \
     cd openfoam/ && \
     ./Allwmake -j 64 -s -q -l
@@ -42,12 +41,14 @@ RUN chmod +x $wkdir/openfoam/Allwmake && \
 RUN echo 'export LD_LIBRARY_PATH=$wkdir/ThirdParty-common/platforms/linux64Gcc/fftw-3.3.10/lib:$LD_LIBRARY_PATH' >> /home/foam/.bashrc && \
     echo 'source /usr/lib/openfoam/etc/bashrc' >> /home/foam/.bashrc && \
     echo 'export OMPI_MCA_btl_vader_single_copy_mechanism=none' >> /home/foam/.bashrc
-# RUN chmod +xrw -R /workdir
+# Create workdir if it doesn't exist
+RUN mkdir -p /workdir && chmod 777 /workdir
 ENV OMPI_ALLOW_RUN_AS_ROOT=1
 ENV OMPI_ALLOW_RUN_AS_ROOT_CONFIRM=1
 # Test OpenFOAM installation
 RUN source $wkdir/openfoam/etc/bashrc && \
     foamSystemCheck && \
     foamInstallationTest
-# Set the entrypoint
-ENTRYPOINT [ "./entrypoint.sh" ]
+# Set the workdir to /workdir and run entrypoint from there
+WORKDIR /workdir
+ENTRYPOINT ["./entrypoint.sh"]
