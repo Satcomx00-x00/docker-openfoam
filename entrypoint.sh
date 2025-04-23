@@ -8,7 +8,7 @@
 # MPI = 4
 # MODE = interFoam
 # ARGUMENTS = -parallel
-
+source /opt/openfoam11/etc/bashrc
 # Terminal header
 print_header() {
     clear
