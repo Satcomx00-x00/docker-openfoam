@@ -8,7 +8,7 @@
 # MPI = 4
 # MODE = interFoam
 # ARGUMENTS = -parallel
-source /opt/openfoam11/etc/bashrc
+
 # Terminal header
 print_header() {
     clear
@@ -70,7 +70,12 @@ fi
 # Use the actual extracted directory name, might be different from ZIP_BASE
 WORKDIR_CASE="/workdir/OpenFoam/$EXTRACTED_DIR"
 print_message "Changing working directory to $WORKDIR_CASE" $GREEN
-cd "$WORKDIR_CASE" || { print_message "Failed to change directory to $WORKDIR_CASE. Exiting." $RED; exit 1; }
+cd "$WORKDIR_CASE"
+CD_EXIT_CODE=$?
+if [ $CD_EXIT_CODE -ne 0 ]; then
+    print_message "Failed to change directory to $WORKDIR_CASE (Exit Code: $CD_EXIT_CODE). Exiting." $RED
+    exit 1
+fi
 
 # Environment variables (PATH, LD_LIBRARY_PATH, WM_PROJECT_DIR etc.)
 # are expected to be set by the Dockerfile ENV instructions when using the official base image.
@@ -81,8 +86,23 @@ ulimit -v unlimited
 
 # Debugging: Verify current directory and existence of system/blockMeshDict
 print_message "Current directory before blockMesh: $(pwd)" $YELLOW
-print_message "Checking for system directory contents:" $YELLOW
-ls -l system/
+print_message "Listing contents of current directory:" $YELLOW
+ls -la
+print_message "Checking for system/blockMeshDict file:" $YELLOW
+if [ -f "system/blockMeshDict" ]; then
+    print_message "Found system/blockMeshDict." $GREEN
+else
+    print_message "ERROR: system/blockMeshDict not found in $(pwd)." $RED
+    # Optionally list system directory if it exists, even if file doesn't
+    if [ -d "system" ]; then
+        print_message "Contents of system/ directory:" $YELLOW
+        ls -la system/
+    else
+        print_message "ERROR: system/ directory not found in $(pwd)." $RED
+    fi
+    # Exit here if the file is mandatory for blockMesh
+    # exit 1 # Consider exiting if file not found
+fi
 
 # Run blockMesh (rely on ENV PATH set in Dockerfile)
 print_message "Running blockMesh..." $GREEN

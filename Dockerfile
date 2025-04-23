@@ -29,7 +29,7 @@ WORKDIR /workdir
 
 # Define the entrypoint for the container
 # Source the OpenFOAM environment setup script and then execute the custom entrypoint
-ENTRYPOINT ["/entrypoint.sh"]
+ENTRYPOINT ["bash", "-c", "source /opt/openfoam11/etc/bashrc && /entrypoint.sh"]
 
 # Optional: Default command if entrypoint needs arguments or for debugging
-# CMD ["bash"] 
+# CMD ["bash"]
