@@ -14,7 +14,7 @@ print_header() {
     clear
     echo -e "\033[1;34m"
     echo "  ___                   _____  ___    _   __  ___ "
-    echo " / _ \ _ __   ___ _ __ |  ___|/ _ \  / \ |  \/  | "
+    echo " / _ \ _ __   ___ _ __ | ___|/ _ \  / \ |  \/  | "
     echo "| | | | '_ \ / _ \ '_ \| |_  | | | |/ _ \| |\/| | "
     echo "| |_| | |_) |  __/ | | |  _| | |_| / ___ \ |  | | "
     echo " \___/| .__/ \___|_| |_|_|    \___/_/   \_\_|  |_| "
@@ -50,6 +50,36 @@ display_table() {
 # Print header
 print_header
 
+# --- Variable Validation ---
+print_message "Validating required environment variables..." $YELLOW
+MISSING_VARS=0
+if [ -z "$MPI" ]; then
+    print_message "ERROR: Environment variable MPI is not set." $RED
+    MISSING_VARS=1
+fi
+if [ -z "$MODE" ]; then
+    print_message "ERROR: Environment variable MODE is not set." $RED
+    MISSING_VARS=1
+fi
+# ARGUMENTS can potentially be empty, so we might not strictly require it to be non-empty.
+# If it's essential, uncomment the check below.
+# if [ -z "$ARGUMENTS" ]; then
+#     print_message "ERROR: Environment variable ARGUMENTS is not set." $RED
+#     MISSING_VARS=1
+# fi
+if [ -z "$ZIP_ARCHIVE_INPUT" ]; then
+    print_message "ERROR: Environment variable ZIP_ARCHIVE_INPUT is not set." $RED
+    MISSING_VARS=1
+fi
+
+if [ $MISSING_VARS -ne 0 ]; then
+    print_message "One or more required environment variables are missing. Please configure them (e.g., via Portainer template). Exiting." $RED
+    exit 1
+else
+    print_message "All required environment variables are present." $GREEN
+fi
+# --- End Variable Validation ---
+
 cd /workdir
 mkdir -p OpenFoam
 cd OpenFoam
@@ -84,39 +114,7 @@ fi
 ulimit -s unlimited
 ulimit -v unlimited
 
-# Debugging: Verify current directory and existence of system/blockMeshDict
-print_message "Current directory before blockMesh: $(pwd)" $YELLOW
-print_message "Listing contents of current directory:" $YELLOW
-ls -la
-print_message "Checking for system/blockMeshDict file:" $YELLOW
-if [ -f "system/blockMeshDict" ]; then
-    print_message "Found system/blockMeshDict." $GREEN
-else
-    print_message "ERROR: system/blockMeshDict not found in $(pwd)." $RED
-    # Optionally list system directory if it exists, even if file doesn't
-    if [ -d "system" ]; then
-        print_message "Contents of system/ directory:" $YELLOW
-        ls -la system/
-    else
-        print_message "ERROR: system/ directory not found in $(pwd)." $RED
-    fi
-    # Exit here if the file is mandatory for blockMesh
-    # exit 1 # Consider exiting if file not found
-fi
-
-# Run blockMesh (rely on ENV PATH set in Dockerfile)
-print_message "Running blockMesh..." $GREEN
-blockMesh
-BLOCKMESH_EXIT_CODE=$?
-
-# Check if blockMesh succeeded
-if [ $BLOCKMESH_EXIT_CODE -ne 0 ]; then
-    print_message "blockMesh failed with exit code $BLOCKMESH_EXIT_CODE. Skipping simulation and zipping." $RED
-    exit $BLOCKMESH_EXIT_CODE
-fi
-
-# If blockMesh succeeded, proceed with the simulation
-print_message "Running $MODE with $MPI MPI processes..." $GREEN
+print_message "Proceeding to run $MODE with $MPI MPI processes..." $GREEN
 # Display a summary table
 header="Simulation Summary"
 # Make sure ZIP_OUTPUT_FOLDER is defined before displaying it
@@ -125,7 +123,7 @@ rows=("Input Archive: $ZIP_ARCHIVE_INPUT" "Output Archive: $ZIP_OUTPUT_FOLDER" "
 display_table "$header" "${rows[@]}"
 
 # Run mpirun (rely on ENV PATH set in Dockerfile)
-mpirun -n $MPI $MODE $ARGUMENTS
+mpirun -np $MPI $MODE $ARGUMENTS
 MPIRUN_EXIT_CODE=$?
 
 # Check for mpirun errors

@@ -40,7 +40,7 @@ docker run --rm \
 **Output:**
 
 *   The container will unzip the input archive into `/workdir/OpenFoam/`.
-*   It will run `blockMesh` and the specified solver (`MODE`) inside the extracted case directory.
+*   It will run the specified solver (`MODE`) inside the extracted case directory. Note: `blockMesh` is **not** automatically executed by this script. Ensure your case is meshed beforehand or includes meshing steps in a custom script if needed.
 *   If successful, the entire extracted case directory (including results) will be zipped into a file named `<input_zip_basename>-output.zip` (e.g., `damBreak_Finer_4mpi-output.zip`) inside `/workdir`. This output zip file will be available in your mounted local directory after the container finishes.
 
 **Notes:**

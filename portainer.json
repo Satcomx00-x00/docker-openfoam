@@ -1,0 +1,53 @@
+{
+    "version": "3",
+    "templates": [
+        {
+            "id": 1,
+            "type": 1,
+            "title": "OpenFoam 2306",
+            "description": "OpenFOAM CFD software for fluid flow and heat transfer simulation. Calculs",
+            "note": "V0.5 - Supports parallel computation",
+            "categories": [
+                "simulation"
+            ],
+            "platform": "linux",
+            "logo": "https://alternative.me/media/256/gnu-octave-icon-zxbh5s33l9r6r1bo-c.png",
+            "image": "satcomx00/docker-openfoam-2:latest",
+            "interactive": true,
+            "name": "openfoam-2306",
+            "hostname": "openfoam",
+            "env": [
+                {
+                    "name": "MPI",
+                    "label": "Number of MPI Processes",
+                    "default": "4"
+                },
+                {
+                    "name": "MODE",
+                    "label": "Mode/Solver",
+                    "default": "myXiFoam"
+                },
+                {
+                    "name": "ARGUMENTS",
+                    "label": "Arguments added to the main command (-parallel, ...)",
+                    "default": "-parallel"
+                },
+                {
+                    "name": "ZIP_ARCHIVE_INPUT",
+                    "label": "A valid .zip file path uploaded into your personal volume. (CASE SENSITIVE)",
+                    "default": "OpenFoam/my_openfoam_with_mpi"
+                }
+            ],
+            "volumes": [
+                {
+                    "container": "/workdir",
+                    "bind": "",
+                    "readonly": false
+                }
+            ],
+            "network": "none",
+            "restart_policy": "no",
+            "privileged": false
+        }
+    ]
+}
