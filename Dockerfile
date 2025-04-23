@@ -3,7 +3,7 @@
 # docker build -t satcomx00/openfoam-runner:latest .
 
 # Use the pre-built OpenFOAM base image
-FROM satcomx00/openfoam-base:latest as base
+FROM satcomx00/openfoam-base:latest AS base
 
 # Runtime specific environment variables
 ENV OMPI_ALLOW_RUN_AS_ROOT=1
