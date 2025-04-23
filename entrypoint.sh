@@ -79,6 +79,11 @@ cd "$WORKDIR_CASE" || { print_message "Failed to change directory to $WORKDIR_CA
 ulimit -s unlimited
 ulimit -v unlimited
 
+# Debugging: Verify current directory and existence of system/blockMeshDict
+print_message "Current directory before blockMesh: $(pwd)" $YELLOW
+print_message "Checking for system directory contents:" $YELLOW
+ls -l system/
+
 # Run blockMesh (rely on ENV PATH set in Dockerfile)
 print_message "Running blockMesh..." $GREEN
 blockMesh
