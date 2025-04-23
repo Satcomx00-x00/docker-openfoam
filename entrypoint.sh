@@ -73,16 +73,16 @@ print_message "Changing working directory to $WORKDIR_CASE" $GREEN
 cd "$WORKDIR_CASE" || { print_message "Failed to change directory to $WORKDIR_CASE. Exiting." $RED; exit 1; }
 
 # Define the source command for reuse, using the path from the official image
-FOAM_ENV_SOURCE="source /opt/OpenFOAM/OpenFOAM-dev/etc/bashrc"
+# FOAM_ENV_SOURCE="source /opt/OpenFOAM/OpenFOAM-dev/etc/bashrc"
 
 # Check if OpenFOAM environment can be sourced (basic check)
-print_message "Checking OpenFOAM environment..." $GREEN
-bash -c "$FOAM_ENV_SOURCE && exit 0"
-if [ $? -ne 0 ]; then
-    print_message "Failed to source OpenFOAM bashrc from official image path. Exiting." $RED
-    exit 1
-fi
-print_message "OpenFOAM environment seems sourceable/set." $GREEN
+# print_message "Checking OpenFOAM environment..." $GREEN
+# bash -c "$FOAM_ENV_SOURCE && exit 0"
+# if [ $? -ne 0 ]; then
+#     print_message "Failed to source OpenFOAM bashrc from official image path. Exiting." $RED
+#     exit 1
+# fi
+# print_message "OpenFOAM environment seems sourceable/set." $GREEN
 
 # Set ulimit
 ulimit -s unlimited
