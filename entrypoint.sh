@@ -89,18 +89,17 @@ ulimit -s unlimited
 ulimit -v unlimited
 
 # Run blockMesh within a sourced environment
-print_message "Running blockMesh..." $GREEN
-bash -c "$FOAM_ENV_SOURCE && blockMesh"
-BLOCKMESH_EXIT_CODE=$?
+# print_message "Running blockMesh..." $GREEN
+# bash -c "$FOAM_ENV_SOURCE && blockMesh"
+# BLOCKMESH_EXIT_CODE=$?
 
 # Check if blockMesh succeeded
-if [ $BLOCKMESH_EXIT_CODE -ne 0 ]; then
-    print_message "blockMesh failed with exit code $BLOCKMESH_EXIT_CODE. Skipping simulation and zipping." $RED
-    exit $BLOCKMESH_EXIT_CODE
-fi
+# if [ $BLOCKMESH_EXIT_CODE -ne 0 ]; then
+#     print_message "blockMesh failed with exit code $BLOCKMESH_EXIT_CODE. Skipping simulation and zipping." $RED
+#     exit $BLOCKMESH_EXIT_CODE
+# fi
 
 # If blockMesh succeeded, proceed with the simulation
-FOAM_DIR_PATH="$WM_PROJECT_DIR"
 print_message "Running $MODE with $MPI MPI processes..." $GREEN
 # Display a summary table
 header="Simulation Summary"
