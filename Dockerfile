@@ -1,24 +1,21 @@
-# Build this image after building the base image:
-# docker build -t satcomx00/openfoam-base:latest -f Dockerfile.openfoam .
+# Build this image using the official OpenFOAM base image:
 # docker build -t satcomx00/openfoam-runner:latest .
 
-# Use the pre-built OpenFOAM base image
-# FROM satcomx00/openfoam-base:latest AS base
+# Use the official OpenFOAM base image with ParaView
 FROM openfoam/openfoam-dev-paraview510 AS base
 
-# Install runtime dependencies needed by the entrypoint script
+# Install runtime dependencies needed by the entrypoint script (zip/unzip might already be present, but ensure they are)
 USER root
 RUN apt-get update && apt-get install -y --no-install-recommends \
     zip \
     unzip \
-    libopenmpi-dev \
     && rm -rf /var/lib/apt/lists/*
 
 # Runtime specific environment variables
 ENV OMPI_ALLOW_RUN_AS_ROOT=1
 ENV OMPI_ALLOW_RUN_AS_ROOT_CONFIRM=1
-# Ensure WM_PROJECT_DIR is set for the entrypoint script sourcing
-ENV WM_PROJECT_DIR=/usr/lib/openfoam
+# Set WM_PROJECT_DIR to the typical path in the official image
+ENV WM_PROJECT_DIR=/opt/OpenFOAM/OpenFOAM-dev
 
 # Copy the entrypoint script
 COPY entrypoint.sh /entrypoint.sh

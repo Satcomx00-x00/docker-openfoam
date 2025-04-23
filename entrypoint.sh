@@ -72,15 +72,14 @@ WORKDIR_CASE="/workdir/OpenFoam/$EXTRACTED_DIR"
 print_message "Changing working directory to $WORKDIR_CASE" $GREEN
 cd "$WORKDIR_CASE" || { print_message "Failed to change directory to $WORKDIR_CASE. Exiting." $RED; exit 1; }
 
-# Define the source command for reuse
-FOAM_ENV_SOURCE="source /usr/lib/openfoam/etc/bashrc"
+# Define the source command for reuse, using the path from the official image
+FOAM_ENV_SOURCE="source /opt/OpenFOAM/OpenFOAM-dev/etc/bashrc"
 
 # Check if OpenFOAM environment can be sourced (basic check)
-# This also helps ensure the environment variables set in Dockerfile are loaded
 print_message "Checking OpenFOAM environment..." $GREEN
-bash -c "$FOAM_ENV_SOURCE && printenv PATH && printenv LD_LIBRARY_PATH && exit 0" # Print paths for debugging
+bash -c "$FOAM_ENV_SOURCE && exit 0"
 if [ $? -ne 0 ]; then
-    print_message "Failed to source OpenFOAM bashrc or environment variables not set correctly. Exiting." $RED
+    print_message "Failed to source OpenFOAM bashrc from official image path. Exiting." $RED
     exit 1
 fi
 print_message "OpenFOAM environment seems sourceable/set." $GREEN
