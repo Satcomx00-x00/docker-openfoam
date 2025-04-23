@@ -50,3 +50,5 @@ RUN source /usr/lib/openfoam/etc/bashrc && \
 
 # Default command (optional, can be useful for debugging the base image)
 # CMD ["bash"]
+
+

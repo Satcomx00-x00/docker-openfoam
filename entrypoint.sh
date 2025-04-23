@@ -72,35 +72,25 @@ WORKDIR_CASE="/workdir/OpenFoam/$EXTRACTED_DIR"
 print_message "Changing working directory to $WORKDIR_CASE" $GREEN
 cd "$WORKDIR_CASE" || { print_message "Failed to change directory to $WORKDIR_CASE. Exiting." $RED; exit 1; }
 
-# Source OpenFOAM bashrc
-print_message "Sourcing OpenFOAM bashrc..." $GREEN
-# Ensure variables set by bashrc are exported to the script's environment
-set -a
-source /usr/lib/openfoam/etc/bashrc
-set +a
+# Define the source command for reuse
+FOAM_ENV_SOURCE="source /usr/lib/openfoam/etc/bashrc"
 
-# Check if OpenFOAM environment is sourced successfully
-if [ -z "$WM_PROJECT_DIR" ]; then
+# Check if OpenFOAM environment can be sourced (basic check)
+print_message "Checking OpenFOAM environment..." $GREEN
+bash -c "$FOAM_ENV_SOURCE && exit 0"
+if [ $? -ne 0 ]; then
     print_message "Failed to source OpenFOAM bashrc. Exiting." $RED
     exit 1
 fi
-
-# Construct the PATH carefully, ensuring system paths and MPI paths are included
-# Start with OpenFOAM paths, then add /usr/bin for MPI, then the original PATH
-export PATH="${WM_PROJECT_BIN}:${WM_THIRD_PARTY_BIN}:/usr/bin:${PATH}"
-# Clean up potential leading/trailing/double colons
-export PATH=$(echo $PATH | sed -e 's/^:*//' -e 's/:*$//' -e 's/:\{2,\}/:/g')
-
-print_message "OpenFOAM environment sourced. WM_PROJECT_DIR=$WM_PROJECT_DIR" $GREEN
-print_message "PATH=$PATH" $YELLOW # Debugging PATH
+print_message "OpenFOAM environment seems sourceable." $GREEN
 
 # Set ulimit
 ulimit -s unlimited
 ulimit -v unlimited
 
-# Run blockMesh
+# Run blockMesh within a sourced environment
 print_message "Running blockMesh..." $GREEN
-blockMesh
+bash -c "$FOAM_ENV_SOURCE && blockMesh"
 BLOCKMESH_EXIT_CODE=$?
 
 # Check if blockMesh succeeded
@@ -119,8 +109,9 @@ ZIP_OUTPUT_FOLDER="$ZIP_BASE-output.zip"
 rows=("Input Archive: $ZIP_ARCHIVE_INPUT" "Output Archive: $ZIP_OUTPUT_FOLDER" "MPI Processes: $MPI" "Mode: $MODE" "Arguments: $ARGUMENTS")
 display_table "$header" "${rows[@]}"
 
-# Redirect mpirun output to a log file (optional, remove '2>&1' if not needed)
-mpirun -n $MPI $MODE $ARGUMENTS # 2>&1
+# Run mpirun within a sourced environment
+# Note: mpirun itself might handle environment propagation, but sourcing ensures the solver ($MODE) is found
+bash -c "$FOAM_ENV_SOURCE && mpirun -n $MPI $MODE $ARGUMENTS"
 MPIRUN_EXIT_CODE=$?
 
 # Check for mpirun errors
