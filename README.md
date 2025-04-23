@@ -1,10 +1,9 @@
-# Docker-OpenFoam
-Build the images:
-```bash
-# Build the base image (if needed, usually pulled from Docker Hub)
-# docker build -t satcomx00/openfoam-base:latest -f Dockerfile.openfoam .
+# Docker-OpenFoam Runner (OpenFOAM 2306)
 
-# Build the runner image
+This container runs OpenFOAM (version 2306) simulations based on a provided case directory zipped into an archive. It uses the `opencfd/openfoam-dev:2306` base image.
+
+Build the runner image:
+```bash
 docker build -t satcomx00/openfoam-runner:latest -f Dockerfile .
 ```
 
@@ -45,7 +44,7 @@ docker run --rm \
 
 **Notes:**
 
-*   The OpenFOAM environment (`/opt/openfoam11/etc/bashrc`) is automatically sourced when the container starts.
+*   The OpenFOAM environment (`/usr/lib/openfoam/openfoam2306/etc/bashrc`) is automatically sourced when the container starts via the entrypoint script.
 *   MPI optimized : `ulimit -s unlimited ; ulimit -v unlimited` is set within the entrypoint script.
 
 https://github.com/Satcomx00-x00/docker-openfoam

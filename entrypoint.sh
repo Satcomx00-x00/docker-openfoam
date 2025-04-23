@@ -8,7 +8,9 @@
 # MPI = 4
 # MODE = interFoam
 # ARGUMENTS = -parallel
-source /opt/openfoam11/etc/bashrc
+# Source the appropriate OpenFOAM environment script
+source /usr/lib/openfoam/openfoam2306/etc/bashrc # Typical path for OpenFOAM 2306 from opencfd images
+
 # Terminal header
 print_header() {
     clear

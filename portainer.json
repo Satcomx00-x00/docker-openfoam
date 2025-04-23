@@ -4,18 +4,18 @@
         {
             "id": 1,
             "type": 1,
-            "title": "OpenFoam 2306",
-            "description": "OpenFOAM CFD software for fluid flow and heat transfer simulation. Calculs",
-            "note": "V0.5 - Supports parallel computation",
+            "title": "OpenFoam 2306 Runner",
+            "description": "OpenFOAM CFD software (v2306) runner for fluid flow and heat transfer simulation.",
+            "note": "V0.6 - Based on opencfd/openfoam-dev:2306. Supports parallel computation.",
             "categories": [
                 "simulation"
             ],
             "platform": "linux",
-            "logo": "https://alternative.me/media/256/gnu-octave-icon-zxbh5s33l9r6r1bo-c.png",
-            "image": "satcomx00/docker-openfoam-2:latest",
+            "logo": "https://www.openfoam.com/img/openfoam-logo.png",
+            "image": "satcomx00/openfoam-runner:latest",
             "interactive": true,
-            "name": "openfoam-2306",
-            "hostname": "openfoam",
+            "name": "openfoam-2306-runner",
+            "hostname": "openfoam-runner",
             "env": [
                 {
                     "name": "MPI",
@@ -25,7 +25,7 @@
                 {
                     "name": "MODE",
                     "label": "Mode/Solver",
-                    "default": "myXiFoam"
+                    "default": "interFoam"
                 },
                 {
                     "name": "ARGUMENTS",
@@ -35,7 +35,7 @@
                 {
                     "name": "ZIP_ARCHIVE_INPUT",
                     "label": "A valid .zip file path uploaded into your personal volume. (CASE SENSITIVE)",
-                    "default": "OpenFoam/my_openfoam_with_mpi"
+                    "default": "case.zip"
                 }
             ],
             "volumes": [
