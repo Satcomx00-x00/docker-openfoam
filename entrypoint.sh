@@ -74,9 +74,6 @@ cd "$WORKDIR_CASE" || { print_message "Failed to change directory to $WORKDIR_CA
 
 # Environment variables (PATH, LD_LIBRARY_PATH, WM_PROJECT_DIR etc.)
 # are expected to be set by the Dockerfile ENV instructions when using the official base image.
-# Explicitly prepend required OpenFOAM binary directories to the PATH within the script
-export PATH="/opt/openfoam11/platforms/linux64GccDPInt32Opt/bin:/opt/openfoam11/bin:${PATH}"
-print_message "Updated PATH: $PATH" $YELLOW # Debugging PATH
 
 # Set ulimit
 ulimit -s unlimited

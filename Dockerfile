@@ -18,8 +18,6 @@ ENV OMPI_ALLOW_RUN_AS_ROOT=1
 ENV OMPI_ALLOW_RUN_AS_ROOT_CONFIRM=1
 # Set WM_PROJECT_DIR to the typical path in the official image
 ENV WM_PROJECT_DIR=/opt/openfoam11/
-# Explicitly add required OpenFOAM binary directories to the PATH
-ENV PATH=/opt/openfoam11/platforms/linux64GccDPInt32Opt/bin:/opt/openfoam11/bin:${PATH}
 
 # Copy the entrypoint script
 COPY entrypoint.sh /entrypoint.sh
@@ -30,7 +28,8 @@ RUN chmod +x /entrypoint.sh
 WORKDIR /workdir
 
 # Define the entrypoint for the container
-# ENTRYPOINT ["/entrypoint.sh"]
+# Source the OpenFOAM environment setup script and then execute the custom entrypoint
+ENTRYPOINT ["bash", "-c", "source /opt/openfoam11/etc/bashrc && /entrypoint.sh"]
 
 # Optional: Default command if entrypoint needs arguments or for debugging
 CMD ["bash"]
