@@ -30,7 +30,7 @@ RUN chmod +x /entrypoint.sh
 WORKDIR /workdir
 
 # Define the entrypoint for the container
-ENTRYPOINT ["/entrypoint.sh"]
+# ENTRYPOINT ["/entrypoint.sh"]
 
 # Optional: Default command if entrypoint needs arguments or for debugging
 CMD ["bash"]
