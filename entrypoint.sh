@@ -55,7 +55,23 @@ mkdir -p OpenFoam
 cd OpenFoam
 # script terminal.log
 print_message "Unzipping $ZIP_ARCHIVE_INPUT ..." $GREEN
+# Extract the filename without .zip extension from the input path
+ZIP_BASE=$(basename "$ZIP_ARCHIVE_INPUT" .zip)
+# Unzip, ensuring it extracts into a directory named $ZIP_BASE if the archive root isn't already named that.
+# A common pattern is that the zip file contains a single top-level directory.
 unzip -o "/workdir/$ZIP_ARCHIVE_INPUT"
+# Find the actual directory name created by unzip (might differ slightly if zip contains a root folder)
+# Assuming the zip extracts a single directory, find it. Handle potential spaces.
+EXTRACTED_DIR=$(ls -d */ | head -n 1 | sed 's/\///')
+if [ -z "$EXTRACTED_DIR" ]; then
+    print_message "Could not determine the extracted directory name. Exiting." $RED
+    exit 1
+fi
+# Use the actual extracted directory name, might be different from ZIP_BASE
+WORKDIR_CASE="/workdir/OpenFoam/$EXTRACTED_DIR"
+print_message "Changing working directory to $WORKDIR_CASE" $GREEN
+cd "$WORKDIR_CASE" || { print_message "Failed to change directory to $WORKDIR_CASE. Exiting." $RED; exit 1; }
+
 # Source OpenFOAM bashrc
 print_message "Sourcing OpenFOAM bashrc..." $GREEN
 source /usr/lib/openfoam/etc/bashrc
@@ -64,11 +80,6 @@ if [ -z "$WM_PROJECT_DIR" ]; then
     print_message "Failed to source OpenFOAM bashrc. Exiting." $RED
     exit 1
 fi
-# Set working directory
-# Extract the filename without .zip extension
-ZIP_BASE=$(basename "$ZIP_ARCHIVE_INPUT" .zip)
-WORKDIR="/workdir/$ZIP_BASE"
-# cd "$WORKDIR" || exit
 # Set ulimit
 ulimit -s unlimited
 ulimit -v unlimited
@@ -89,11 +100,15 @@ if [ $? -eq 0 ]; then
 else
     print_message "$MODE encountered an error. Please check the log." $RED
 fi
-ZIP_OUTPUT_FOLDER="$ZIP_ARCHIVE_INPUT-output.zip"
-# Zip output folder
-print_message "Zipping $ZIP_ARCHIVE_INPUT to $ZIP_OUTPUT_FOLDER ..." $GREEN
-zip -r "/workdir/$ZIP_OUTPUT_FOLDER" "/workdir/$ZIP_BASE" 2>&1 || {
-    print_message "Failed to zip $ZIP_ARCHIVE_INPUT. Exiting." $RED
+
+# Change back to the base workdir before zipping
+cd /workdir
+
+ZIP_OUTPUT_FOLDER="$ZIP_BASE-output.zip"
+# Zip output folder relative to /workdir
+print_message "Zipping $EXTRACTED_DIR to $ZIP_OUTPUT_FOLDER ..." $GREEN
+zip -r "/workdir/$ZIP_OUTPUT_FOLDER" "OpenFoam/$EXTRACTED_DIR" || {
+    print_message "Failed to zip OpenFoam/$EXTRACTED_DIR. Exiting." $RED
     exit 1
 }
 print_message "Successfully zipped $ZIP_OUTPUT_FOLDER." $GREEN

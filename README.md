@@ -1,4 +1,9 @@
 # Docker-OpenFoam
+```
+docker build -t openfoam-base:latest -f Dockerfile.openfoam .
+docker build -t openfoam-runner:latest -f Dockerfile .
+```
+
 
 You need to add some env vars before starting, to make it well you need to configure :
 
