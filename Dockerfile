@@ -16,6 +16,8 @@ ENV OMPI_ALLOW_RUN_AS_ROOT=1
 ENV OMPI_ALLOW_RUN_AS_ROOT_CONFIRM=1
 # Set WM_PROJECT_DIR to the typical path in the official image
 ENV WM_PROJECT_DIR=/opt/OpenFOAM/OpenFOAM-dev
+# Explicitly add required OpenFOAM binary directories to the PATH
+ENV PATH=/opt/OpenFOAM/OpenFOAM-dev/platforms/linux64GccDPInt32Opt/bin:/opt/OpenFOAM/OpenFOAM-dev/bin:${PATH}
 
 # Copy the entrypoint script
 COPY entrypoint.sh /entrypoint.sh

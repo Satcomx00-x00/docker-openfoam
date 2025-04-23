@@ -72,21 +72,32 @@ WORKDIR_CASE="/workdir/OpenFoam/$EXTRACTED_DIR"
 print_message "Changing working directory to $WORKDIR_CASE" $GREEN
 cd "$WORKDIR_CASE" || { print_message "Failed to change directory to $WORKDIR_CASE. Exiting." $RED; exit 1; }
 
-# Define the source command for reuse, using the path from the official image
-# FOAM_ENV_SOURCE="source /opt/OpenFOAM/OpenFOAM-dev/etc/bashrc"
-
-# Check if OpenFOAM environment can be sourced (basic check)
-# print_message "Checking OpenFOAM environment..." $GREEN
-# bash -c "$FOAM_ENV_SOURCE && exit 0"
-# if [ $? -ne 0 ]; then
-#     print_message "Failed to source OpenFOAM bashrc from official image path. Exiting." $RED
-#     exit 1
-# fi
-# print_message "OpenFOAM environment seems sourceable/set." $GREEN
+# Environment variables (PATH, LD_LIBRARY_PATH, WM_PROJECT_DIR etc.)
+# are expected to be set by the Dockerfile ENV instructions when using the official base image.
 
 # Set ulimit
 ulimit -s unlimited
 ulimit -v unlimited
+
+# Run blockMesh (rely on ENV PATH set in Dockerfile)
+print_message "Running blockMesh..." $GREEN
+blockMesh
+BLOCKMESH_EXIT_CODE=$?
+
+# Check if blockMesh succeeded
+if [ $BLOCKMESH_EXIT_CODE -ne 0 ]; then
+    print_message "blockMesh failed with exit code $BLOCKMESH_EXIT_CODE. Skipping simulation and zipping." $RED
+    exit $BLOCKMESH_EXIT_CODE
+fi
+
+# If blockMesh succeeded, proceed with the simulation
+print_message "Running $MODE with $MPI MPI processes..." $GREEN
+# Display a summary table
+header="Simulation Summary"
+# Make sure ZIP_OUTPUT_FOLDER is defined before displaying it
+ZIP_OUTPUT_FOLDER="$ZIP_BASE-output.zip"
+rows=("Input Archive: $ZIP_ARCHIVE_INPUT" "Output Archive: $ZIP_OUTPUT_FOLDER" "MPI Processes: $MPI" "Mode: $MODE" "Arguments: $ARGUMENTS")
+display_table "$header" "${rows[@]}"
 
 # Run mpirun (rely on ENV PATH set in Dockerfile)
 mpirun -n $MPI $MODE $ARGUMENTS
