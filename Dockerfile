@@ -33,4 +33,4 @@ WORKDIR /workdir
 ENTRYPOINT ["/entrypoint.sh"]
 
 # Optional: Default command if entrypoint needs arguments or for debugging
-# CMD ["bash"]
+CMD ["bash"]
