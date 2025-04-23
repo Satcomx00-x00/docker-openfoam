@@ -76,41 +76,21 @@ cd "$WORKDIR_CASE" || { print_message "Failed to change directory to $WORKDIR_CA
 FOAM_ENV_SOURCE="source /usr/lib/openfoam/etc/bashrc"
 
 # Check if OpenFOAM environment can be sourced (basic check)
+# This also helps ensure the environment variables set in Dockerfile are loaded
 print_message "Checking OpenFOAM environment..." $GREEN
-bash -c "$FOAM_ENV_SOURCE && exit 0"
+bash -c "$FOAM_ENV_SOURCE && printenv PATH && printenv LD_LIBRARY_PATH && exit 0" # Print paths for debugging
 if [ $? -ne 0 ]; then
-    print_message "Failed to source OpenFOAM bashrc. Exiting." $RED
+    print_message "Failed to source OpenFOAM bashrc or environment variables not set correctly. Exiting." $RED
     exit 1
 fi
-print_message "OpenFOAM environment seems sourceable." $GREEN
+print_message "OpenFOAM environment seems sourceable/set." $GREEN
 
 # Set ulimit
 ulimit -s unlimited
 ulimit -v unlimited
 
-# Run blockMesh within a sourced environment
-# print_message "Running blockMesh..." $GREEN
-# bash -c "$FOAM_ENV_SOURCE && blockMesh"
-# BLOCKMESH_EXIT_CODE=$?
-
-# Check if blockMesh succeeded
-# if [ $BLOCKMESH_EXIT_CODE -ne 0 ]; then
-#     print_message "blockMesh failed with exit code $BLOCKMESH_EXIT_CODE. Skipping simulation and zipping." $RED
-#     exit $BLOCKMESH_EXIT_CODE
-# fi
-
-# If blockMesh succeeded, proceed with the simulation
-print_message "Running $MODE with $MPI MPI processes..." $GREEN
-# Display a summary table
-header="Simulation Summary"
-# Make sure ZIP_OUTPUT_FOLDER is defined before displaying it
-ZIP_OUTPUT_FOLDER="$ZIP_BASE-output.zip"
-rows=("Input Archive: $ZIP_ARCHIVE_INPUT" "Output Archive: $ZIP_OUTPUT_FOLDER" "MPI Processes: $MPI" "Mode: $MODE" "Arguments: $ARGUMENTS")
-display_table "$header" "${rows[@]}"
-
-# Run mpirun within a sourced environment
-# Note: mpirun itself might handle environment propagation, but sourcing ensures the solver ($MODE) is found
-bash -c "$FOAM_ENV_SOURCE && mpirun -n $MPI $MODE $ARGUMENTS"
+# Run mpirun (rely on ENV PATH set in Dockerfile)
+mpirun -n $MPI $MODE $ARGUMENTS
 MPIRUN_EXIT_CODE=$?
 
 # Check for mpirun errors

@@ -48,6 +48,14 @@ RUN source /usr/lib/openfoam/etc/bashrc && \
     foamSystemCheck && \
     foamInstallationTest
 
+# Set OpenFOAM environment variables globally for the image
+# These values are derived from sourcing etc/bashrc
+ENV FOAM_APPBIN=$WM_PROJECT_DIR/platforms/linux64GccDPInt32Opt/bin
+ENV FOAM_SITE_APPBIN=$WM_PROJECT_DIR/site/2412/platforms/linux64GccDPInt32Opt/bin
+ENV FOAM_USER_APPBIN=$HOME/OpenFOAM/user-v2412/platforms/linux64GccDPInt32Opt/bin
+ENV PATH=$FOAM_APPBIN:$FOAM_SITE_APPBIN:$FOAM_USER_APPBIN:$WM_PROJECT_BIN:$WM_THIRD_PARTY_BIN:$PATH
+ENV LD_LIBRARY_PATH=$WM_PROJECT_DIR/platforms/linux64GccDPInt32Opt/lib:$WM_THIRD_PARTY_DIR/platforms/linux64GccDPInt32/lib:$LD_LIBRARY_PATH
+
 # Default command (optional, can be useful for debugging the base image)
 # CMD ["bash"]
 
