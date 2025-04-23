@@ -1,9 +1,9 @@
 # Build this image after building the base image:
-# docker build -t openfoam-base:latest -f Dockerfile.openfoam .
-# docker build -t openfoam-runner:latest .
+# docker build -t satcomx00/openfoam-base:latest -f Dockerfile.openfoam .
+# docker build -t satcomx00/openfoam-runner:latest .
 
 # Use the pre-built OpenFOAM base image
-FROM openfoam-base:latest as base
+FROM satcomx00/openfoam-base:latest as base
 
 # Runtime specific environment variables
 ENV OMPI_ALLOW_RUN_AS_ROOT=1

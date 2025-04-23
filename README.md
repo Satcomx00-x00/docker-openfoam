@@ -1,7 +1,7 @@
 # Docker-OpenFoam
 ```
-docker build -t openfoam-base:latest -f Dockerfile.openfoam .
-docker build -t openfoam-runner:latest -f Dockerfile .
+docker build -t satcomx00/openfoam-base:latest -f Dockerfile.openfoam .
+docker build -t satcomx00/openfoam-runner:latest -f Dockerfile .
 ```
 
 
