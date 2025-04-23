@@ -17,9 +17,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 ENV OMPI_ALLOW_RUN_AS_ROOT=1
 ENV OMPI_ALLOW_RUN_AS_ROOT_CONFIRM=1
 # Set WM_PROJECT_DIR to the typical path in the official image
-ENV WM_PROJECT_DIR=/opt/openfoam-dev/
+ENV WM_PROJECT_DIR=/opt/openfoam11/
 # Explicitly add required OpenFOAM binary directories to the PATH
-ENV PATH=/opt/openfoam-dev/platforms/linux64GccDPInt32Opt/bin:/opt/openfoam-dev/bin:${PATH}
+ENV PATH=/opt/openfoam11/platforms/linux64GccDPInt32Opt/bin:/opt/openfoam11/bin:${PATH}
 
 # Copy the entrypoint script
 COPY entrypoint.sh /entrypoint.sh
