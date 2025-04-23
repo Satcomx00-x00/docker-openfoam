@@ -80,6 +80,11 @@ if [ -z "$WM_PROJECT_DIR" ]; then
     print_message "Failed to source OpenFOAM bashrc. Exiting." $RED
     exit 1
 fi
+# Explicitly add OpenFOAM bin directories to PATH
+export PATH=$WM_PROJECT_BIN:$WM_THIRD_PARTY_BIN:$PATH
+print_message "OpenFOAM environment sourced. WM_PROJECT_DIR=$WM_PROJECT_DIR" $GREEN
+print_message "PATH=$PATH" $YELLOW # Debugging PATH
+
 # Set ulimit
 ulimit -s unlimited
 ulimit -v unlimited

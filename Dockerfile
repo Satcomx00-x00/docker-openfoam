@@ -5,6 +5,13 @@
 # Use the pre-built OpenFOAM base image
 FROM satcomx00/openfoam-base:latest AS base
 
+# Install runtime dependencies needed by the entrypoint script
+USER root
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    zip \
+    unzip \
+    && rm -rf /var/lib/apt/lists/*
+
 # Runtime specific environment variables
 ENV OMPI_ALLOW_RUN_AS_ROOT=1
 ENV OMPI_ALLOW_RUN_AS_ROOT_CONFIRM=1
