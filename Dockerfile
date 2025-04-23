@@ -3,7 +3,8 @@
 # docker build -t satcomx00/openfoam-runner:latest .
 
 # Use the pre-built OpenFOAM base image
-FROM satcomx00/openfoam-base:latest AS base
+# FROM satcomx00/openfoam-base:latest AS base
+FROM openfoam/openfoam-dev-paraview510 AS base
 
 # Install runtime dependencies needed by the entrypoint script
 USER root
