@@ -232,6 +232,30 @@ if [ $MPIRUN_EXIT_CODE -eq 0 ]; then
         exit 1 # Exit if zipping fails
     }
     print_message "Successfully zipped $ZIP_OUTPUT_FOLDER." $GREEN
+    
+    # Validate the created ZIP archive
+    print_message "Validating ZIP archive integrity..." $YELLOW
+    zip -T "/workdir/$ZIP_OUTPUT_FOLDER" > /dev/null 2>&1
+    ZIP_TEST_EXIT_CODE=$?
+    
+    if [ $ZIP_TEST_EXIT_CODE -eq 0 ]; then
+        print_message "ZIP archive validation successful." $GREEN
+        
+        # Remove the source folder after successful validation
+        print_message "Removing source folder OpenFoam/$EXTRACTED_DIR ..." $YELLOW
+        rm -rf "OpenFoam/$EXTRACTED_DIR"
+        RM_EXIT_CODE=$?
+        
+        if [ $RM_EXIT_CODE -eq 0 ]; then
+            print_message "Source folder successfully removed." $GREEN
+        else
+            print_message "Warning: Failed to remove source folder (Exit Code: $RM_EXIT_CODE)." $YELLOW
+        fi
+    else
+        print_message "ZIP archive validation failed (Exit Code: $ZIP_TEST_EXIT_CODE). Keeping source folder." $RED
+        exit $ZIP_TEST_EXIT_CODE
+    fi
+    
     print_message "Work done, you can find your outputs to $ZIP_OUTPUT_FOLDER in your personal volume."
 else
     print_message "$MODE encountered an error (Exit Code: $MPIRUN_EXIT_CODE). Please check the log. Output will not be zipped." $RED
