@@ -89,16 +89,41 @@ cd OpenFoam
 print_message "Unzipping $ZIP_ARCHIVE_INPUT ..." $GREEN
 # Extract the filename without .zip extension from the input path
 ZIP_BASE=$(basename "$ZIP_ARCHIVE_INPUT" .zip)
-# Unzip, ensuring it extracts into a directory named $ZIP_BASE if the archive root isn't already named that.
-# A common pattern is that the zip file contains a single top-level directory.
-unzip -o "/workdir/$ZIP_ARCHIVE_INPUT"
-# Find the actual directory name created by unzip (might differ slightly if zip contains a root folder)
-# Assuming the zip extracts a single directory, find it. Handle potential spaces.
-EXTRACTED_DIR=$(ls -d */ | head -n 1 | sed 's/\///')
+
+# Get the list of directories before extraction
+DIRS_BEFORE=$(ls -d */ 2>/dev/null | sort)
+
+# Unzip and capture the extraction info
+unzip -q -o "/workdir/$ZIP_ARCHIVE_INPUT"
+UNZIP_EXIT_CODE=$?
+if [ $UNZIP_EXIT_CODE -ne 0 ]; then
+    print_message "Failed to unzip $ZIP_ARCHIVE_INPUT (Exit Code: $UNZIP_EXIT_CODE). Exiting." $RED
+    exit $UNZIP_EXIT_CODE
+fi
+
+# Get the list of directories after extraction
+DIRS_AFTER=$(ls -d */ 2>/dev/null | sort)
+
+# Find the new directory created by extraction
+EXTRACTED_DIR=$(comm -13 <(echo "$DIRS_BEFORE") <(echo "$DIRS_AFTER") | head -n 1 | sed 's/\///')
+
+# Fallback: if no new directory detected, try alternative method
+if [ -z "$EXTRACTED_DIR" ]; then
+    # Try to extract directory name from unzip output
+    EXTRACTED_DIR=$(unzip -l "/workdir/$ZIP_ARCHIVE_INPUT" | grep -E "/$" | head -n 1 | awk '{print $4}' | sed 's/\///')
+fi
+
+# Final fallback: use the first directory found
+if [ -z "$EXTRACTED_DIR" ]; then
+    EXTRACTED_DIR=$(ls -d */ 2>/dev/null | head -n 1 | sed 's/\///')
+fi
+
 if [ -z "$EXTRACTED_DIR" ]; then
     print_message "Could not determine the extracted directory name. Exiting." $RED
     exit 1
 fi
+
+print_message "Detected extracted directory: $EXTRACTED_DIR" $GREEN
 # Use the actual extracted directory name, might be different from ZIP_BASE
 WORKDIR_CASE="/workdir/OpenFoam/$EXTRACTED_DIR"
 print_message "Changing working directory to $WORKDIR_CASE" $GREEN
@@ -202,7 +227,7 @@ if [ $MPIRUN_EXIT_CODE -eq 0 ]; then
 
     # Zip output folder relative to /workdir
     print_message "Zipping $EXTRACTED_DIR to $ZIP_OUTPUT_FOLDER ..." $GREEN
-    zip -r "/workdir/$ZIP_OUTPUT_FOLDER" "OpenFoam/$EXTRACTED_DIR" || {
+    zip -q -r "/workdir/$ZIP_OUTPUT_FOLDER" "OpenFoam/$EXTRACTED_DIR" || {
         print_message "Failed to zip OpenFoam/$EXTRACTED_DIR. Exiting." $RED
         exit 1 # Exit if zipping fails
     }
