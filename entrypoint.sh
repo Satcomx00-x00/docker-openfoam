@@ -116,6 +116,71 @@ fi
 ulimit -s unlimited
 ulimit -v unlimited
 
+# --- Debugging: Check parallel decomposition setup ---
+print_message "=== DEBUGGING PARALLEL SETUP ===" $YELLOW
+print_message "Current working directory: $(pwd)" $GREEN
+print_message "Contents of current directory:" $GREEN
+ls -la
+
+# Check for decomposeParDict
+DECOMPOSE_DICT="system/decomposeParDict"
+if [ -f "$DECOMPOSE_DICT" ]; then
+    print_message "Found $DECOMPOSE_DICT" $GREEN
+    print_message "Contents of $DECOMPOSE_DICT:" $GREEN
+    cat "$DECOMPOSE_DICT" | grep -E "(numberOfSubdomains|method)" || echo "Could not find numberOfSubdomains or method"
+    
+    # Extract numberOfSubdomains from decomposeParDict
+    DICT_PROCS=$(grep -E "numberOfSubdomains\s+" "$DECOMPOSE_DICT" | sed 's/[^0-9]*//g')
+    if [ -n "$DICT_PROCS" ]; then
+        print_message "numberOfSubdomains in decomposeParDict: $DICT_PROCS" $GREEN
+    else
+        print_message "Could not extract numberOfSubdomains from decomposeParDict" $RED
+    fi
+else
+    print_message "WARNING: $DECOMPOSE_DICT not found!" $RED
+fi
+
+# Count existing processor directories
+PROCESSOR_DIRS=$(ls -d processor* 2>/dev/null | wc -l)
+if [ $PROCESSOR_DIRS -gt 0 ]; then
+    print_message "Found $PROCESSOR_DIRS processor directories:" $GREEN
+    ls -d processor* 2>/dev/null
+else
+    print_message "No processor directories found. Case might not be decomposed." $YELLOW
+    print_message "Available directories:" $GREEN
+    ls -d */ 2>/dev/null || echo "No directories found"
+fi
+
+# Compare values
+print_message "=== COMPARISON ===" $YELLOW
+print_message "MPI processes requested: $MPI" $GREEN
+print_message "Processor directories found: $PROCESSOR_DIRS" $GREEN
+print_message "decomposeParDict numberOfSubdomains: ${DICT_PROCS:-'NOT_FOUND'}" $GREEN
+
+# Check if decomposition is needed
+if [ $PROCESSOR_DIRS -eq 0 ] && [ "$MPI" -gt 1 ]; then
+    print_message "No processor directories found but MPI > 1. Running decomposePar..." $YELLOW
+    decomposePar
+    DECOMPOSE_EXIT_CODE=$?
+    if [ $DECOMPOSE_EXIT_CODE -ne 0 ]; then
+        print_message "decomposePar failed (Exit Code: $DECOMPOSE_EXIT_CODE). Exiting." $RED
+        exit $DECOMPOSE_EXIT_CODE
+    fi
+    # Recount processor directories after decomposition
+    PROCESSOR_DIRS=$(ls -d processor* 2>/dev/null | wc -l)
+    print_message "After decomposePar: Found $PROCESSOR_DIRS processor directories" $GREEN
+fi
+
+# Final validation
+if [ "$MPI" -gt 1 ] && [ $PROCESSOR_DIRS -ne $MPI ]; then
+    print_message "ERROR: Mismatch detected!" $RED
+    print_message "  MPI processes: $MPI" $RED
+    print_message "  Processor directories: $PROCESSOR_DIRS" $RED
+    print_message "  Please ensure your case is properly decomposed for $MPI processes." $RED
+    exit 1
+fi
+# --- End Debugging ---
+
 print_message "Proceeding to run $MODE with $MPI MPI processes..." $GREEN
 # Display a summary table
 header="Simulation Summary"
